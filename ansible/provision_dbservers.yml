@@ -1,0 +1,24 @@
+---
+
+- hosts: dbservers
+  vars:
+    is_provision: true
+  become: yes
+  pre_tasks:
+    - name: Place database name into target VM env vars
+      lineinfile:
+        dest: /etc/environment
+        state: present
+        line: 'ETSIN_DATABASE_NAME="{{ etsin_database.name }}"'
+    - name: Place database user into target VM env vars
+      lineinfile:
+        dest: /etc/environment
+        state: present
+        line: 'ETSIN_DATABASE_USER="{{ etsin_database.user }}"'
+  roles:
+    - os-base
+    - postgres
+    - backup
+  handlers:
+    - name: restart sshd
+      service: name=sshd state=restarted

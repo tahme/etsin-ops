@@ -1,0 +1,6 @@
+---
+
+  - name: Install frontend dependencies
+    yum: name={{ item }} state=latest
+    with_items:
+      - npm

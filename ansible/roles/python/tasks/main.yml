@@ -1,0 +1,29 @@
+- name: Is python 3 installed?
+  stat: path=/usr/bin/python3.6
+  register: command_result
+
+- block:
+    - name: Install IUS
+      yum: name=https://centos7.iuscommunity.org/ius-release.rpm
+
+    - name: Install Python 3.6
+      yum: name={{ item }} state=latest
+      with_items:
+        - python36u
+        - python36u-pip
+        - python36u-devel
+
+    - name: Create virtual environment directory for Python {{ python_virtualenv_path }}
+      file: path={{ python_virtualenv_path }} state=directory owner={{ app_user }} group=etsin mode=0755
+
+    - name: Install virtual environment for Python
+      command: /usr/bin/python3.6 -m venv {{ python_virtualenv_path }}
+
+  when: not command_result.stat.exists
+
+- name: Set owner of pyvenv to {{ app_user }} user
+  file: path={{ python_virtualenv_path }} owner={{ app_user }} group=etsin recurse=yes mode=0755
+
+- name: install wheel package to enable using pip for installing requirements as {{ app_user }}
+  pip: name=wheel virtualenv={{ python_virtualenv_path }}
+  become_user: "{{ app_user }}"

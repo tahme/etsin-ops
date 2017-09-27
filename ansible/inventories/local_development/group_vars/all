@@ -1,0 +1,51 @@
+app_base_path: "/etsin/{{ project_name }}"
+
+os_users:
+  - "{{ app_user }}"
+
+webserver_1_internal_ip: 127.0.0.1
+dbserver_1_internal_ip: 127.0.0.1
+dataserver_1_internal_ip: 127.0.0.1
+
+deployment_environment_id: local_development
+server_certificate_name: nginx-selfsigned
+project_repo_branch: test
+server_domain_name: etsin-finder.local
+
+nginx_es_credentials:
+  - { username: etsin, password: test-etsin }
+
+etsin_database:
+  name: etsin_db
+  user: etsin_db_user
+  password: PFh3TXt66MZhGHPd
+
+app_log_level: DEBUG
+app_debug_mode: True
+app_secret_key: cb1c9f28f16ddd1e41fb47e12d4a73f9ed76d6df93c54f31
+
+elasticsearch_instance:
+  node_name: "node1"
+  allow_origin: "*"
+  is_master_node: "true"
+  is_data_node: "true"
+
+elasticsearch:
+  allow_origin: "*"
+  hosts: 127.0.0.1
+  port: 9200
+  use_ssl: False
+  cluster_name: etsin-es-cluster
+
+rabbitmq:
+  hosts: localhost
+  port: 5672
+  vhost: etsin
+
+  # admin user
+  admin_user: admin
+  admin_password: U4rwRkkq3TRSRZDu
+
+  # main user/publisher
+  user: etsin-user
+  password: M3cVwCxZNDwAh7HU

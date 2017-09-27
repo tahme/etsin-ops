@@ -1,0 +1,27 @@
+# Ignore swap and zip files
+*.swp
+*.zip
+
+# Ignore vagrant cache directory
+.vagrant/
+
+# ignore metax-api because it is another git-repo
+etsin_finder/
+
+# ansible retry-file
+ansible/site.retry
+
+ubuntu*.log
+local_settings.py
+ansible/inventories/playground/group_vars/playground
+ansible/inventories/test/group_vars/test
+ansible/inventories/test/host_vars
+
+ansible/files/
+*.pem
+ansible/roles/ansible-elasticsearch/
+*.tar.gz
+__pycache__
+
+# Mac stuff
+.DS_Store

@@ -1,0 +1,28 @@
+# Variables related to logging
+APP_LOG_LEVEL: {{ app_log_level }}
+APP_LOG_PATH: {{ app_log_base_path }}/{{ project_name }}.log
+
+# Variables related to basic app config
+DEBUG: {{ app_debug_mode }}
+SECRET_KEY: {{ app_secret_key }}
+
+# Variables related to database
+ETSIN_DATABASE: {{ etsin_database.name }}
+ETSIN_DATABASE_USER: {{ etsin_database.user }}
+ETSIN_DATABASE_PASSWORD: {{ etsin_database.password }}
+ETSIN_DATABASE_HOST: {{ dbserver_1_internal_ip }}
+
+# Variables related to elasticsearch
+ELASTICSEARCH:
+  HOSTS: ['{{ elasticsearch.hosts}}']
+  PORT: {{ elasticsearch.port }}
+  USE_SSL: {{ elasticsearch.use_ssl }}
+
+# Variables related to rabbitmq
+RABBITMQ:
+  HOSTS: {{ rabbitmq.hosts }}
+  PORT: {{ rabbitmq.port }}
+
+  USER: {{ rabbitmq.user }}
+  PASSWORD: {{ rabbitmq.password }}
+  VHOST: {{ rabbitmq.vhost }}

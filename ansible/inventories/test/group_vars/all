@@ -1,0 +1,7 @@
+webserver_1_external_ip: x.x.x.x
+dbserver_1_external_ip: x.x.x.x
+dataserver_1_external_ip: x.x.x.x
+
+app_base_path: "{{ etsin_base_path }}/{{ project_name }}"
+deployment_environment_id: test
+project_repo_branch: test

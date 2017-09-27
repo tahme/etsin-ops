@@ -1,0 +1,11 @@
+---
+
+- hosts: dataservers
+  vars:
+    is_provision: false
+  become: yes
+  roles:
+    - deploy_dataservers
+    - { role: reboot,
+        when: deployment_environment_id != 'local_development'
+      }

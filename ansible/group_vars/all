@@ -1,0 +1,17 @@
+project_name: etsin_finder
+app_user: etsin-user
+project_repo: https://github.com/CSCfi/etsin-finder
+
+app_path: "{{ app_base_path }}/{{ project_name }}"
+etsin_base_path: /srv/etsin
+python_virtualenv_path: "{{ etsin_base_path }}/pyenv"
+app_log_base_path: "/var/log/{{ project_name }}"
+nginx_gunicorn_socket_path: "{{ etsin_base_path }}/gunicorn/socket"
+nginx_gunicorn_proxy_pass: "http://unix:{{ nginx_gunicorn_socket_path }}"
+nginx_static_root: "{{ app_path }}/static"
+
+etsin_db_base_path: "{{ etsin_base_path }}/db"
+etsin_db_data_path: "{{ etsin_db_base_path }}/data"
+etsin_db_backup_path: "{{ etsin_db_base_path }}/backup"
+etsin_db_backup_archive_path: "{{ etsin_db_backup_path }}/archive"
+etsin_db_config_path: "{{ etsin_db_base_path }}/config"
