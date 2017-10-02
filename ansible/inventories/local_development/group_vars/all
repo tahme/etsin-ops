@@ -23,6 +23,7 @@ etsin_database:
 app_log_level: DEBUG
 app_debug_mode: True
 app_secret_key: cb1c9f28f16ddd1e41fb47e12d4a73f9ed76d6df93c54f31
+app_template_reload: True
 
 elasticsearch_instance:
   node_name: "node1"

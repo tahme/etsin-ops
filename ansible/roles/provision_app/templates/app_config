@@ -5,6 +5,7 @@ APP_LOG_PATH: {{ app_log_base_path }}/{{ project_name }}.log
 # Variables related to basic app config
 DEBUG: {{ app_debug_mode }}
 SECRET_KEY: {{ app_secret_key }}
+TEMPLATES_AUTO_RELOAD: {{ app_template_reload }}
 
 # Variables related to database
 ETSIN_DATABASE: {{ etsin_database.name }}
