@@ -8,7 +8,7 @@ python_virtualenv_path: "{{ etsin_base_path }}/pyenv"
 app_log_base_path: "/var/log/{{ project_name }}"
 nginx_gunicorn_socket_path: "{{ etsin_base_path }}/gunicorn/socket"
 nginx_gunicorn_proxy_pass: "http://unix:{{ nginx_gunicorn_socket_path }}"
-nginx_static_root: "{{ app_path }}/static"
+nginx_static_root: "{{ app_path }}/frontend/static/"
 
 etsin_db_base_path: "{{ etsin_base_path }}/db"
 etsin_db_data_path: "{{ etsin_db_base_path }}/data"
