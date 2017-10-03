@@ -3,12 +3,13 @@ app_user: etsin-user
 project_repo: https://github.com/CSCfi/etsin-finder
 
 app_path: "{{ app_base_path }}/{{ project_name }}"
+app_frontend_path: "{{ app_path }}/frontend"
 etsin_base_path: /srv/etsin
 python_virtualenv_path: "{{ etsin_base_path }}/pyenv"
 app_log_base_path: "/var/log/{{ project_name }}"
 nginx_gunicorn_socket_path: "{{ etsin_base_path }}/gunicorn/socket"
 nginx_gunicorn_proxy_pass: "http://unix:{{ nginx_gunicorn_socket_path }}"
-nginx_static_root: "{{ app_path }}/frontend/static/"
+nginx_static_root: "{{ app_frontend_path }}/static/"
 
 etsin_db_base_path: "{{ etsin_base_path }}/db"
 etsin_db_data_path: "{{ etsin_db_base_path }}/data"
