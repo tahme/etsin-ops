@@ -1,8 +1,5 @@
 app_base_path: "/etsin/{{ project_name }}"
 
-os_users:
-  - "{{ app_user }}"
-
 webserver_1_internal_ip: 127.0.0.1
 dbserver_1_internal_ip: 127.0.0.1
 dataserver_1_internal_ip: 127.0.0.1

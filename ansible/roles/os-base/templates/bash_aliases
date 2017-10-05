@@ -7,6 +7,6 @@ alias etsin_src='cd {{ app_base_path }}'
 alias source_pyenv='source {{ python_virtualenv_path }}/bin/activate'
 alias tail_app_log='tail -f -n 200 {{ app_log_base_path }}/{{ project_name }}.log'
 # Run tests in virtual environment
-alias runtests='cd {{ app_base_path }} && python setup.py test && cd -'
+alias run_flask_tests='cd {{ app_base_path }} && pytest --cov=etsin_finder tests/ && cd -'
 alias runserver='cd {{ app_base_path }} && sudo {{ python_virtualenv_path }}/bin/gunicorn --bind unix:{{ nginx_gunicorn_socket_path }} --user {{ app_user }} --group nginx --access-logfile - --error-logfile - --config /etc/gunicorn.py --group nginx --reload etsin_finder.wsgi:app'
 alias npmwatch='cd {{ app_frontend_path }} && npm run watch'

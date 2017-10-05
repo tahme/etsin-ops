@@ -1,9 +1,36 @@
 ---
 
-  - name: Install frontend dependencies
-    yum: name={{ item }} state=latest
-    with_items:
-      - npm
+  - block:
 
-  - name: Install frontend dependencies based on package.json
-    npm: path={{ app_frontend_path }} state=latest
+      - name: Update frontend dependency version numbers to latest ones
+        shell: ncu -u
+        become_user: "{{ app_user }}"
+        args:
+          chdir: "{{ app_frontend_path }}"
+          
+      - name: Install frontend dependencies based on package.json for local development environment
+        npm: path={{ app_frontend_path }} state=present production=no
+        become_user: "{{ app_user }}"
+
+      - name: Run frontend dev build for local development environment
+        shell: npm run dev-build
+        become_user: "{{ app_user }}"
+        args:
+          chdir: "{{ app_frontend_path }}"
+
+    when: deployment_environment_id == 'local_development'
+
+  - block:
+
+      - name: Install frontend dependencies based on package.json for NON local development environment
+        npm: path={{ app_frontend_path }} state=present production=yes
+        become_user: "{{ app_user }}"
+
+      - name: Run frontend build for NON local development environment
+        shell: npm run build
+        become_user: "{{ app_user }}"
+        args:
+          chdir: "{{ app_frontend_path }}"
+        ignore_errors: yes
+
+    when: deployment_environment_id != 'local_development'

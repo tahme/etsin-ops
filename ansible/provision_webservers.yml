@@ -9,7 +9,6 @@
     - python
     - nginx
     - provision_app
-    - frontend
   handlers:
     - name: restart sshd
       service: name=sshd state=restarted
