@@ -24,8 +24,9 @@
 
   - block:
 
+      # TODO: At some point try to come up with a way so that the below command does not need to install webpack
       - name: Install frontend dependencies based on package.json for NON local development environment
-        shell: npm install --only=production
+        shell: npm install
         become_user: "{{ app_user }}"
         args:
           chdir: "{{ app_frontend_path }}"
