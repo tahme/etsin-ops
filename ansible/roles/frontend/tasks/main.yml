@@ -7,10 +7,12 @@
         become_user: "{{ app_user }}"
         args:
           chdir: "{{ app_frontend_path }}"
-          
+
       - name: Install frontend dependencies based on package.json for local development environment
-        npm: path={{ app_frontend_path }} state=present production=no
+        shell: npm install
         become_user: "{{ app_user }}"
+        args:
+          chdir: "{{ app_frontend_path }}"
 
       - name: Run frontend dev build for local development environment
         shell: npm run dev-build
@@ -23,14 +25,15 @@
   - block:
 
       - name: Install frontend dependencies based on package.json for NON local development environment
-        npm: path={{ app_frontend_path }} state=present production=yes
+        shell: npm install --only=production
         become_user: "{{ app_user }}"
+        args:
+          chdir: "{{ app_frontend_path }}"
 
       - name: Run frontend build for NON local development environment
         shell: npm run build
         become_user: "{{ app_user }}"
         args:
           chdir: "{{ app_frontend_path }}"
-        ignore_errors: yes
 
     when: deployment_environment_id != 'local_development'
