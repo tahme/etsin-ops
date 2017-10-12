@@ -2,10 +2,32 @@
 
 - include_role: name=update_packages
 
-- name: Pull latest data from project repo branch {{ project_repo_branch }}
-  git: repo={{ project_repo }} dest={{ app_base_path }} version={{ project_repo_branch }}
-  become_user: "{{ app_user }}"
-  ignore_errors: yes
+- block:
+
+    - name: Pull latest data from project repo branch {{ project_repo_branch }}
+      git: repo={{ project_repo }} dest={{ app_base_path }} version={{ project_repo_branch }}
+      become_user: "{{ app_user }}"
+      ignore_errors: yes
+
+  when: deployment_environment_id in ['local_development', 'test', 'stable']
+
+- block:
+
+    - include_role: name=app_config
+
+    - name: Copy deployment script to remote
+      template: src=templates/update_etsin_finder_with_tags.sh dest=/tmp/update_etsin_finder_with_tags.sh owner={{ app_user }} mode=500
+
+    - name: Fetch tags, checkout the tag {{ etsin_finder_tag }}
+      shell: /tmp/update_etsin_finder_with_tags.sh {{ etsin_finder_tag }}
+      register: shell_result
+      become_user: "{{ app_user }}"
+
+    - name: Print script output
+      debug:
+        var: shell_result.stdout_lines
+
+  when: deployment_environment_id in ['staging', 'production']
 
 - name: Update app python package requirements to their latest versions
   shell: pur --force --requirement {{ app_base_path }}/requirements.txt
@@ -18,8 +40,8 @@
 
 - include_role: name=frontend
 
-- name: Make sure nginx server is running
-  service: name=nginx state=started enabled=yes
+- name: Make sure nginx server is restarted
+  service: name=nginx state=restarted enabled=yes
 
 - name: Make sure gunicorn service is restarted
   service: name=gunicorn state=restarted enabled=yes
