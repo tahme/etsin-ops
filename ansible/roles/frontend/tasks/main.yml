@@ -1,5 +1,11 @@
 ---
 
+  - name: Remove frontend dependencies from node_modules that are not listed in package.json
+    shell: npm prune
+    become_user: "{{ app_user }}"
+    args:
+      chdir: "{{ app_frontend_path }}"
+
   - block:
 
       - name: Update frontend dependency version numbers to latest ones
@@ -24,8 +30,6 @@
 
   - block:
 
-      # TODO: At some point try to come up with a way so that the below command does not need to install webpack
-      # TODO: Does npm install remove everything else from node_modules except what is exactly in package.json?
       # TODO: Develop this so that for each environment with differing build a different kind of npm run build and npm install command is run
       - name: Install frontend dependencies based on package.json for NON local development environment
         shell: npm install
