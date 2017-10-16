@@ -19,11 +19,11 @@ ELASTICSEARCH:
   PORT: {{ elasticsearch.port }}
   USE_SSL: {{ elasticsearch.use_ssl }}
 
-# Variables related to rabbitmq
-RABBITMQ:
-  HOSTS: {{ rabbitmq.hosts }}
-  PORT: {{ rabbitmq.port }}
-
-  USER: {{ rabbitmq.user }}
-  PASSWORD: {{ rabbitmq.password }}
-  VHOST: {{ rabbitmq.vhost }}
+# Variables related to Metax rabbitmq
+METAX_RABBITMQ:
+  HOST: {{ metax_rabbitmq.host }}
+  PORT: {{ metax_rabbitmq.port }}
+  VHOST: {{ metax_rabbitmq.vhost }}
+  EXCHANGE: {{ metax_rabbitmq.exchange }}
+  USER: {{ metax_rabbitmq.user }}
+  PASSWORD: {{ metax_rabbitmq.password }}
