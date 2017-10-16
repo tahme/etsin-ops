@@ -6,8 +6,8 @@
   become: yes
   roles:
     - os-base
-    - python
-    - rabbitmq
+    #- python
+    #- rabbitmq
     - elasticsearch
   handlers:
     - name: restart sshd
