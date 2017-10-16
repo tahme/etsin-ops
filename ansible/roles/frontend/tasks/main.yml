@@ -21,7 +21,7 @@
           chdir: "{{ app_frontend_path }}"
 
       - name: Run frontend dev build for local development environment
-        shell: npm run dev-build
+        shell: npm run dev-build -- --define process.env.NODE_ENV="'development'"
         become_user: "{{ app_user }}"
         args:
           chdir: "{{ app_frontend_path }}"
@@ -30,15 +30,14 @@
 
   - block:
 
-      # TODO: Develop this so that for each environment with differing build a different kind of npm run build and npm install command is run
       - name: Install frontend dependencies based on package.json for NON local development environment
-        shell: npm install
+        shell: npm install --only=production
         become_user: "{{ app_user }}"
         args:
           chdir: "{{ app_frontend_path }}"
 
       - name: Run frontend build for NON local development environment
-        shell: npm run build
+        shell: npm run build -- --define process.env.NODE_ENV="'test'"
         become_user: "{{ app_user }}"
         args:
           chdir: "{{ app_frontend_path }}"
