@@ -27,3 +27,9 @@ METAX_RABBITMQ:
   EXCHANGE: {{ metax_rabbitmq.exchange }}
   USER: {{ metax_rabbitmq.user }}
   PASSWORD: {{ metax_rabbitmq.password }}
+
+# Variables related to Metax REST API
+METAX_API:
+  HOST: {{ metax_api.host }}
+  USER: {{ metax_api.user }}
+  PASSWORD: {{ metax_api.password }}
