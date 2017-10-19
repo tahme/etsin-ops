@@ -7,7 +7,7 @@ User={{ app_user }}
 Group=nginx
 WorkingDirectory={{ app_base_path }}
 Environment="Path={{ python_virtualenv_path }}/bin"
-ExecStart={{ python_virtualenv_path }}/bin/gunicorn --bind unix:{{ nginx_gunicorn_socket_path }} --access-logfile /var/log/gunicorn/gunicorn.log --error-logfile /var/log/gunicorn/gunicorn_error.log --log-level info --config /etc/gunicorn.py etsin_finder.wsgi:app
+ExecStart={{ python_virtualenv_path }}/bin/gunicorn --bind unix:{{ nginx_gunicorn_socket_path }} --access-logfile /var/log/gunicorn/gunicorn.log --error-logfile /var/log/gunicorn/gunicorn_error.log --log-level info --config /etc/gunicorn.py etsin_finder.finder:app
 Restart=always
 
 [Install]
