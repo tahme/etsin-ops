@@ -1,0 +1,9 @@
+[Unit]
+Description=RabbitMQ consumer
+
+[Service]
+Type=simple
+ExecStart=/etsin/etsin_finder/rabbitmq/rabbitmq_client.py
+
+[Install]
+WantedBy=multi-user.target

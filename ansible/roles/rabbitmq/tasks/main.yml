@@ -1,0 +1,13 @@
+- name: Copy RabbitMQ service file
+  template: src=rabbitmq-consumer.service dest=/lib/systemd/system mode=0644 force=yes
+
+- name: Reload systemd
+  systemd: daemon_reload=yes
+
+- name: Enable RabbitMQ service
+  systemd:
+    name: rabbitmq-consumer
+    enabled: yes
+
+- name: Start RabbitMQ consumer
+  systemd: state=started name=rabbitmq-consumer
