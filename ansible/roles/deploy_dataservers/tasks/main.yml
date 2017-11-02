@@ -1,3 +1,7 @@
 ---
 
   - include_role: name=update_packages
+
+  - debug:
+      msg: "Implement the loading of test data into search index!!!"
+    when: deployment_environment_id in ['local_development', 'test']

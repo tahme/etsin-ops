@@ -16,3 +16,5 @@ etsin_db_data_path: "{{ etsin_db_base_path }}/data"
 etsin_db_backup_path: "{{ etsin_db_base_path }}/backup"
 etsin_db_backup_archive_path: "{{ etsin_db_backup_path }}/archive"
 etsin_db_config_path: "{{ etsin_db_base_path }}/config"
+
+etsin_reindexer_path: "{{ etsin_base_path }}/search_index"
