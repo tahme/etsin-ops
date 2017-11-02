@@ -3,7 +3,7 @@ Description=RabbitMQ consumer
 
 [Service]
 Type=simple
-ExecStart={{ etsin_reindexer_path }}/rabbitmq/rabbitmq_client.py
+ExecStart={{ etsin_reindexer_path }}/run_rabbitmq_consumer.py
 
 [Install]
 WantedBy=multi-user.target

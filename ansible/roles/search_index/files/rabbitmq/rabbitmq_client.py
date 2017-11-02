@@ -81,7 +81,7 @@ def callback_reindex(ch, method, properties, body):
         if reindex_success:
             channel.basic_ack(delivery_tag=method.delivery_tag)
         else:
-            logging.info('Failed to reindex %s', json.loads(
+            log.info('Failed to reindex %s', json.loads(
                 body).get('urn_identifier', 'unknown identifier'))
             channel.basic_nack(delivery_tag=method.delivery_tag, requeue=True)
 
@@ -97,7 +97,7 @@ def callback_delete(ch, method, properties, body):
         if delete_success:
             channel.basic_ack(delivery_tag=method.delivery_tag)
         else:
-            logging.info('Failed to delete %s', json.loads(
+            log.info('Failed to delete %s', json.loads(
                 body).get('urn_identifier', 'unknown identifier'))
             # TODO: If delete fails because there's no such id in index,
             # no need to requeue
@@ -109,6 +109,6 @@ channel.basic_consume(callback_reindex, queue=queue_1)
 channel.basic_consume(callback_reindex, queue=queue_2)
 channel.basic_consume(callback_delete, queue=queue_3)
 
-logging.info('[*] RabbitMQ client started')
+log.info('[*] RabbitMQ client started')
 print('[*] RabbitMQ is running. To exit press CTRL+C. See logs for indexing details.')
 channel.start_consuming()
