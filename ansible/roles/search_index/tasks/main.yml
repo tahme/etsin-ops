@@ -30,7 +30,7 @@
     become_user: "{{ app_user }}"
 
   - name: Create empty search index
-    shell: su - {{ app_user }} -c '{{ etsin_reindexer_path }}/scripts/create_empty_index_and_mapping.sh'
+    shell: su - {{ app_user }} -c '{{ etsin_reindexer_path }}/scripts/create_empty_index.sh'
 
   - name: Create cronjob for running reindexing script that does not recreate the search index
     cron:

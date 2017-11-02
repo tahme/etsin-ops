@@ -2,6 +2,6 @@
 
   - include_role: name=update_packages
 
-  - debug:
-      msg: "Implement the loading of test data into search index!!!"
+  - name: Load test data
+    shell: su - {{ app_user }} -c '{{ etsin_reindexer_path }}/scripts/load_test_data_to_index.sh'
     when: deployment_environment_id in ['local_development', 'test']

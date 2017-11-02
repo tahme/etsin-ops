@@ -50,6 +50,30 @@ def delete_es_document_using_urn_identifier(urn_id):
         es_client.delete_dataset(urn_id)
 
 
+def load_test_data_into_es(dataset_amt):
+    log.info("Loading test data into Elasticsearch..")
+
+    es_client = ElasticSearchService(es_config)
+    metax_api = MetaxAPIService(metax_api_config)
+    converter = CRConverter()
+
+    if not es_client or not metax_api:
+        log.error("Loading test data into Elasticsearch failed")
+
+    if not es_client.index_exists():
+        log.info("Index does not exist, trying to create")
+        if not es_client.create_index_and_mapping():
+            log.error("Unable to create index")
+            return False
+
+    all_metax_urn_identifiers = metax_api.get_all_catalog_record_urn_identifiers()
+    urn_ids_to_load = all_metax_urn_identifiers[0:min(len(all_metax_urn_identifiers), dataset_amt)]
+
+    es_client.do_bulk_request_for_datasets([], converter.convert_metax_cr_urn_ids_to_es_data_model(urn_ids_to_load, metax_api))
+    log.info("Test data loaded into Elasticsearch")
+    return
+
+
 def _create_es_client():
     if es_config:
         return ElasticSearchService(es_config)
