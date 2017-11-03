@@ -2,6 +2,18 @@
 
   - include_role: name=update_packages
 
+  - name: Update script python package requirements to their latest versions
+    shell: pur --force --requirement {{ role_path }}/../search_index/files/requirements.txt
+    become_user: "{{ app_user }}"
+    when: deployment_environment_id == 'local_development'
+
+  - name: Copy reindexing related scripts to {{ etsin_reindexer_path }}
+    copy: src={{ role_path }}/../search_index/files/ dest={{ etsin_reindexer_path }} owner={{ app_user }} group=etsin mode=740
+
+  - name: Install reindexing script dependencies
+    pip: requirements={{ etsin_reindexer_path }}/requirements.txt virtualenv={{ python_virtualenv_path }}
+    become_user: "{{ app_user }}"
+
   - name: Load test data
     shell: su - {{ app_user }} -c '{{ etsin_reindexer_path }}/scripts/load_test_data_to_index.sh'
     when: deployment_environment_id in ['local_development', 'test']

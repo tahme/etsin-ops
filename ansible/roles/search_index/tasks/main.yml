@@ -22,6 +22,11 @@
         network.host: [_local_, _site_]
       }
 
+  - name: Update script python package requirements to their latest versions
+    shell: pur --force --requirement {{ role_path }}/files/requirements.txt
+    become_user: "{{ app_user }}"
+    when: deployment_environment_id == 'local_development'
+
   - name: Copy reindexing related scripts to {{ etsin_reindexer_path }}
     copy: src={{ role_path }}/files/ dest={{ etsin_reindexer_path }} owner={{ app_user }} group=etsin mode=740
 
