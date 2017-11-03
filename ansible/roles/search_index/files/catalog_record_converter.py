@@ -1,4 +1,4 @@
-from search_index.domain.es_dataset_data_model import ESDatasetModel
+from elastic.domain.es_dataset_data_model import ESDatasetModel
 from reindexing_log import get_logger
 
 log = get_logger(__name__)

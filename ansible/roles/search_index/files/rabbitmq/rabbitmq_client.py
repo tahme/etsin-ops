@@ -1,4 +1,4 @@
-'''
+"""
 Consumer connects to Metax RabbitMQ and listens for changes in Metax.
 When metadata is created, updated or deleted, consumer calls appropriate
 functions to propagate the change to Etsin search index.
@@ -10,14 +10,13 @@ source_pyenv
 python /etsin/etsin_finder/rabbitmq_client.py
 
 Press CTRL+C to exit script.
-'''
+"""
 
 import json
 import pika
-import yaml
 
-from search_index.catalog_record_converter import CRConverter
-from search_index.service.elasticsearch_service import ElasticSearchService
+from catalog_record_converter import CRConverter
+from elastic.service.es_service import ElasticSearchService
 
 from elasticsearch.exceptions import RequestError
 

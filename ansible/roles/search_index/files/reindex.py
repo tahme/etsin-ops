@@ -1,17 +1,20 @@
 import sys
 
-from search_index.reindexer import reindex_all_without_emptying_index
-from search_index.reindexer import reindex_all_by_emptying_index
+from reindexer import reindex_all_without_emptying_index
+from reindexer import reindex_all_by_emptying_index
 from reindexing_log import get_logger
 
 log = get_logger(__name__)
 
-def main():
-    NO = 'no'
-    YES = 'yes'
-    RECREATE_INDEX = "recreate_index"
+NO = 'no'
+YES = 'yes'
+RECREATE_INDEX = "recreate_index"
 
-    instructions = """\nRun the program as etsin-user with pyenv activated using 'python reindex.py recreate_index=X where X = yes or X = no"""
+
+def main():
+
+    instructions = """\nRun the program as etsin-user with pyenv activated using 'python reindex.py recreate_index=X 
+    where X = yes or X = no"""
 
     run_args = dict([arg.split('=', maxsplit=1) for arg in sys.argv[1:]])
 

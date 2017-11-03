@@ -1,6 +1,6 @@
-from search_index.service.elasticsearch_service import ElasticSearchService
+from elastic.service.es_service import ElasticSearchService
 from metax.metax_api import MetaxAPIService
-from search_index.catalog_record_converter import CRConverter
+from catalog_record_converter import CRConverter
 from utils import get_metax_api_config, get_elasticsearch_config
 from reindexing_log import get_logger
 
