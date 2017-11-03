@@ -1,5 +1,5 @@
-from elastic.domain.es_dataset_data_model import ESDatasetModel
-from reindexing_log import get_logger
+from etsin_search_index.elastic.domain.es_dataset_data_model import ESDatasetModel
+from etsin_search_index.reindexing_log import get_logger
 
 log = get_logger(__name__)
 

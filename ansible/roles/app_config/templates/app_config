@@ -1,6 +1,10 @@
-# Variables related to logging
+# Variables related to etsin_finder app logging
 APP_LOG_LEVEL: {{ app_log_level }}
 APP_LOG_PATH: {{ app_log_base_path }}/{{ project_name }}.log
+
+# Variables related to search index app logging
+SEARCH_APP_LOG_LEVEL: {{ app_log_level }}
+SEARCH_APP_LOG_PATH: {{ app_log_base_path }}/reindexing.log
 
 # Variables related to basic app config
 DEBUG: {{ app_debug_mode }}

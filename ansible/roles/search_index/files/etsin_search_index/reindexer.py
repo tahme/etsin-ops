@@ -1,8 +1,8 @@
-from elastic.service.es_service import ElasticSearchService
-from metax.metax_api import MetaxAPIService
-from catalog_record_converter import CRConverter
-from utils import get_metax_api_config, get_elasticsearch_config
-from reindexing_log import get_logger
+from etsin_search_index.elastic.service.es_service import ElasticSearchService
+from etsin_search_index.metax.metax_api import MetaxAPIService
+from etsin_search_index.catalog_record_converter import CRConverter
+from etsin_search_index.utils import get_metax_api_config, get_elasticsearch_config
+from etsin_search_index.reindexing_log import get_logger
 
 log = get_logger(__name__)
 

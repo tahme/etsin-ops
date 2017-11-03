@@ -1,8 +1,8 @@
 import sys
 
-from reindexer import reindex_all_without_emptying_index
-from reindexer import reindex_all_by_emptying_index
-from reindexing_log import get_logger
+from etsin_search_index.reindexer import reindex_all_without_emptying_index
+from etsin_search_index.reindexer import reindex_all_by_emptying_index
+from etsin_search_index.reindexing_log import get_logger
 
 log = get_logger(__name__)
 

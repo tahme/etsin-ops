@@ -3,7 +3,7 @@ from requests import HTTPError, ConnectionError, Timeout
 import json
 from time import sleep
 
-from reindexing_log import get_logger
+from etsin_search_index.reindexing_log import get_logger
 
 log = get_logger(__name__)
 TIMEOUT = 5

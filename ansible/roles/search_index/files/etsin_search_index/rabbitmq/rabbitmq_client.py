@@ -15,14 +15,14 @@ Press CTRL+C to exit script.
 import json
 import pika
 
-from catalog_record_converter import CRConverter
-from elastic.service.es_service import ElasticSearchService
+from etsin_search_index.catalog_record_converter import CRConverter
+from etsin_search_index.elastic.service.es_service import ElasticSearchService
 
 from elasticsearch.exceptions import RequestError
 
-from utils import get_metax_rabbit_mq_config
-from utils import get_elasticsearch_config
-from reindexing_log import get_logger
+from etsin_search_index.utils import get_metax_rabbit_mq_config
+from etsin_search_index.utils import get_elasticsearch_config
+from etsin_search_index.reindexing_log import get_logger
 
 log = get_logger(__name__)
 

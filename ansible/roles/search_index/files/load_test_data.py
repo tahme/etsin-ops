@@ -1,7 +1,7 @@
 import sys
-from reindexing_log import get_logger
+from etsin_search_index.reindexing_log import get_logger
 
-from reindexer import load_test_data_into_es
+from etsin_search_index.reindexer import load_test_data_into_es
 
 log = get_logger(__name__)
 

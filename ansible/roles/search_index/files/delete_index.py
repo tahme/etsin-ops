@@ -1,4 +1,4 @@
-from reindexer import delete_search_index
+from etsin_search_index.reindexer import delete_search_index
 
 
 def main():

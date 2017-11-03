@@ -4,7 +4,7 @@ from os import path
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import scan
 
-from reindexing_log import get_logger
+from etsin_search_index.reindexing_log import get_logger
 
 log = get_logger(__name__)
 

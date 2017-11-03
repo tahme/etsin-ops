@@ -1,4 +1,4 @@
-from reindexer import create_search_index_and_doc_type_mapping_if_not_exist
+from etsin_search_index.reindexer import create_search_index_and_doc_type_mapping_if_not_exist
 
 
 def main():
