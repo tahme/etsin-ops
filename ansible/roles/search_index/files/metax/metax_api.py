@@ -1,11 +1,13 @@
 import requests
-from requests import HTTPError
+from requests import HTTPError, ConnectionError, Timeout
 import json
+from time import sleep
 
 from reindexing_log import get_logger
 
 log = get_logger(__name__)
-TIMEOUT = 30
+TIMEOUT = 5
+NUM_RETRIES = 3
 
 
 class MetaxAPIService:
@@ -15,58 +17,103 @@ class MetaxAPIService:
         self.METAX_GET_URN_IDENTIFIERS_URL = self.METAX_CATALOG_RECORDS_BASE_URL + '/urn_identifiers'
         self.METAX_GET_CATALOG_RECORD_URL = self.METAX_CATALOG_RECORDS_BASE_URL + '/{0}'
 
-    def get_catalog_record(self, urn_identifier):
-        """ Get a catalog record with a given urn_identifier from MetaX API.
+    @staticmethod
+    def _do_request(request_func, arg=None):
+        sleep_time = 4
+        for x in range(0, NUM_RETRIES):
+            try:
+                if arg:
+                    response = request_func(arg)
+                else:
+                    response = request_func()
+                str_error = None
+            except (ConnectionError, Timeout) as str_error:
+                pass
+
+            if str_error:
+                sleep(sleep_time)  # wait before trying to fetch the data again
+                sleep_time *= 2  # exponential backoff
+            else:
+                break
+
+        if not str_error and response:
+            return response
+        return None
+
+    def get_catalog_record(self, identifier):
+        """ Get a catalog record with the given identifier from MetaX API.
 
         :return: Metax catalog record as json
         """
 
-        r = requests.get(self.METAX_GET_CATALOG_RECORD_URL.format(urn_identifier),
+        def get(identifier):
+            return requests.get(self.METAX_GET_CATALOG_RECORD_URL.format(identifier),
                          headers={'Content-Type': 'application/json'},
                          timeout=TIMEOUT)
-        try:
-            r.raise_for_status()
-        except HTTPError as e:
-            log.error('Failed to get catalog record: \nurn_identifier={urn_id}, \nerror={error}, \njson={json}'.format(
-                urn_id=urn_identifier, error=repr(e), json=self.json_or_empty(r)))
-            return None
-            log.debug('Response text: %s', r.text)
 
-        return json.loads(r.text)
+        response = self._do_request(get, identifier)
+        if not response:
+            log.error("Unable to connect to Metax API")
+            return None
+
+        try:
+            response.raise_for_status()
+        except HTTPError as e:
+            log.error('Failed to get catalog record: \nidentifier={id}, \nerror={error}, \njson={json}'.format(
+                id=identifier, error=repr(e), json=self.json_or_empty(response)))
+            log.error('Response text: %s', response.text)
+            return None
+
+        return json.loads(response.text)
 
     def get_all_catalog_record_urn_identifiers(self):
         """ Get urn_identifiers of all catalog records in MetaX API.
 
         :return: List of urn_identifiers
         """
-        r = requests.get(self.METAX_GET_URN_IDENTIFIERS_URL,
-                         headers={'Content-Type': 'application/json'},
-                         timeout=TIMEOUT)
-        try:
-            r.raise_for_status()
-        except HTTPError as e:
-            log.error('Failed to urn_identifiers from Metax: \nerror={error}, \njson={json}'.format(
-                error=repr(e), json=self.json_or_empty(r)))
+
+        def get():
+            return requests.get(self.METAX_GET_URN_IDENTIFIERS_URL,
+                                headers={'Content-Type': 'application/json'},
+                                timeout=TIMEOUT)
+
+        response = self._do_request(get)
+        if not response:
+            log.error("Unable to connect to Metax API")
             return None
 
-        return json.loads(r.text)
+        try:
+            response.raise_for_status()
+        except HTTPError as e:
+            log.error('Failed to get urn_identifiers from Metax: \nerror={error}, \njson={json}'.format(
+                error=repr(e), json=self.json_or_empty(response)))
+            log.error('Response text: %s', response.text)
+            return None
 
-    def check_catalog_record_exists(self, urn_identifier):
-        """ Ask MetaX whether the catalog record exists in MetaX by using urn_identifier.
+        return json.loads(response.text)
+
+    def check_catalog_record_exists(self, identifier):
+        """ Ask MetaX whether the catalog record exists in MetaX by using identifier.
 
         :return: True/False
         """
-        r = requests.get(
-            self.METAX_CATALOG_RECORDS_BASE_URL + '/{id}/exists'.format(id=urn_identifier), timeout=TIMEOUT)
+
+        def get(identifier):
+            return requests.get(
+                self.METAX_CATALOG_RECORDS_BASE_URL + '/{id}/exists'.format(id=identifier), timeout=TIMEOUT)
+
+        response = self._do_request(get)
+        if not response:
+            log.error("Unable to connect to Metax API")
+            return None
+
         try:
-            r.raise_for_status()
+            response.raise_for_status()
         except Exception as e:
-            log.error(e)
-            log.error("Error when connecting to MetaX dataset exists API")
-            raise e
-            log.debug('Checked catalog record existence in MetaX: ({code}) {json}'.format(
-                code=r.status_code, json=r.json()))
-        return r.json()
+            log.error('Failed to check catalog record existence: \nidentifier={id}, \nerror={error}, '
+                      '\njson={json}'.format(id=identifier, error=repr(e), json=self.json_or_empty(response)))
+            log.error('Response text: %s', response.text)
+        return response.json()
 
     @staticmethod
     def json_or_empty(response):

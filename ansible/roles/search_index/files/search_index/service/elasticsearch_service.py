@@ -23,6 +23,9 @@ class ElasticSearchService:
     def __init__(self, es_config):
         self.es = Elasticsearch(es_config.get('HOSTS'), **self._get_connection_parameters(es_config))
 
+    def client_ok(self):
+        return self.es
+
     def index_exists(self):
         return self.es.indices.exists(index=self.INDEX_NAME)
 

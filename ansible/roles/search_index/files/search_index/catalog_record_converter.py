@@ -1,4 +1,7 @@
 from search_index.domain.es_dataset_data_model import ESDatasetModel
+from reindexing_log import get_logger
+
+log = get_logger(__name__)
 
 
 class CRConverter:
@@ -6,14 +9,21 @@ class CRConverter:
     def convert_metax_cr_urn_ids_to_es_data_model(self, urn_identifiers_in_metax, metax_api):
         es_dataset_data_models = []
         for urn_id_in_metax in urn_identifiers_in_metax:
-            es_dataset_data_models.append(self._convert_metax_cr_urn_id_to_es_data_model(urn_id_in_metax, metax_api))
+            es_data_model = self._convert_metax_cr_urn_id_to_es_data_model(urn_id_in_metax, metax_api)
+            if not es_data_model:
+                log.error("Something went wrong when converting {0} to es data model".format(urn_id_in_metax))
+                continue
+            es_dataset_data_models.append(es_data_model)
 
         return es_dataset_data_models
 
     def _convert_metax_cr_urn_id_to_es_data_model(self, urn_identifier_in_metax, metax_api):
         metax_catalog_record_json = metax_api.get_catalog_record(urn_identifier_in_metax)
-        es_dataset_json = self.convert_metax_catalog_record_json_to_es_data_model(metax_catalog_record_json)
-        return ESDatasetModel(es_dataset_json)
+        if metax_catalog_record_json:
+            es_dataset_json = self.convert_metax_catalog_record_json_to_es_data_model(metax_catalog_record_json)
+            return ESDatasetModel(es_dataset_json)
+
+        return None
 
     def convert_metax_catalog_record_json_to_es_data_model(self, metax_cr_json):
         es_dataset = {}

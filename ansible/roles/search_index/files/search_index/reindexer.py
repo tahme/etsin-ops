@@ -23,6 +23,9 @@ def reindex_all_by_emptying_index():
 def create_search_index_and_doc_type_mapping_if_not_exist():
     es_client = _create_es_client()
 
+    if not es_client:
+        return False
+
     if not es_client.index_exists():
         if not es_client.create_index_and_mapping():
             log.error("Unable to create index or document type mapping")
@@ -33,12 +36,13 @@ def create_search_index_and_doc_type_mapping_if_not_exist():
 
 def delete_search_index():
     es_client = _create_es_client()
-    es_client.delete_index()
+    if es_client:
+        es_client.delete_index()
 
 
 def reindex_metax_catalog_record(metax_catalog_record_json):
     es_client = _create_es_client()
-    if create_search_index_and_doc_type_mapping_if_not_exist(es_client):
+    if es_client and create_search_index_and_doc_type_mapping_if_not_exist(es_client):
         converter = CRConverter()
         es_data_model = converter.convert_metax_catalog_record_json_to_es_data_model(metax_catalog_record_json)
         es_client.reindex_dataset(es_data_model)
@@ -46,7 +50,7 @@ def reindex_metax_catalog_record(metax_catalog_record_json):
 
 def delete_es_document_using_urn_identifier(urn_id):
     es_client = _create_es_client()
-    if es_client.index_exists():
+    if es_client and es_client.index_exists():
         es_client.delete_dataset(urn_id)
 
 
@@ -67,16 +71,23 @@ def load_test_data_into_es(dataset_amt):
             return False
 
     all_metax_urn_identifiers = metax_api.get_all_catalog_record_urn_identifiers()
-    urn_ids_to_load = all_metax_urn_identifiers[0:min(len(all_metax_urn_identifiers), dataset_amt)]
+    if all_metax_urn_identifiers:
+        urn_ids_to_load = all_metax_urn_identifiers[0:min(len(all_metax_urn_identifiers), dataset_amt)]
 
-    es_client.do_bulk_request_for_datasets([], converter.convert_metax_cr_urn_ids_to_es_data_model(urn_ids_to_load, metax_api))
-    log.info("Test data loaded into Elasticsearch")
-    return
+        es_client.do_bulk_request_for_datasets([], converter.convert_metax_cr_urn_ids_to_es_data_model(urn_ids_to_load, metax_api))
+        log.info("Test data loaded into Elasticsearch")
+        return True
+
+    return False
 
 
 def _create_es_client():
     if es_config:
-        return ElasticSearchService(es_config)
+        es_client = ElasticSearchService(es_config)
+        if not es_client.client_ok():
+            log.error("Unable to create Elasticsearch client instance")
+            return False
+        return es_client
 
     return False
 

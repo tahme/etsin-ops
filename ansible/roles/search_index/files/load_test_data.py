@@ -29,7 +29,8 @@ def main():
         log.error(instructions)
         sys.exit(1)
 
-    load_test_data_into_es(int(run_args[AMOUNT_OF_DATASETS]))
+    if not load_test_data_into_es(int(run_args[AMOUNT_OF_DATASETS])):
+        log.error("Something went wrong when loading test data")
 
 if __name__ == '__main__':
     # calling main function
