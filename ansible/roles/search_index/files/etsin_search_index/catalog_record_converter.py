@@ -150,15 +150,15 @@ class CRConverter:
         if isinstance(m_input, list):
             output = []
             for m_obj in m_input:
-                output.append(self._get_converted_single_org_or_person_es_model(m_obj))
+                output.append(self.get_converted_single_org_or_person_es_model(m_obj))
         else:
             output = {}
             if m_input:
-                output = self._get_converted_single_org_or_person_es_model(m_input)
+                output = self.get_converted_single_org_or_person_es_model(m_input)
 
         es_output[relation_name] = output
 
-    def _get_converted_single_org_or_person_es_model(self, m_obj):
+    def get_converted_single_org_or_person_es_model(self, m_obj):
         if m_obj.get('@type', '') not in ['Person', 'Organization']:
             return None
 
