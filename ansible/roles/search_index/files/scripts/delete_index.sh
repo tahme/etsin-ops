@@ -7,5 +7,5 @@ if [ "$USER" != "etsin-user" ]; then
 fi
 
 source /srv/etsin/pyenv/bin/activate
-cd /srv/etsin/search_index
+cd /srv/etsin/search_index/etsin_search_index
 python delete_index.py
