@@ -23,6 +23,10 @@
 
     when: deployment_environment_id == 'local_development'
 
+  - name: Install search app python package requirements
+    pip: requirements={{ search_app_base_path }}/requirements.txt virtualenv={{ python_virtualenv_path }}
+    become_user: "{{ app_user }}"
+
   - name: Create directory {{ search_app_scripts_path }} for search app scripts
     file: path={{ search_app_scripts_path }} state=directory owner={{ app_user }} group=etsin mode=0755
 
@@ -68,7 +72,7 @@
     template: src=rabbitmq-consumer.service dest=/lib/systemd/system mode=0644 force=yes
 
   - name: Reload systemd
-    systemd: daemon_reload=yes
+    systemd: daemon_reload=yes name=rabbitmq-consumer
 
   - name: Enable RabbitMQ service
     systemd:
