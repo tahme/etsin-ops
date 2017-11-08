@@ -8,7 +8,7 @@
     - os-base
     - python
     - nginx
-    - provision_app
+    - provision_web_app
   handlers:
     - name: restart sshd
       service: name=sshd state=restarted

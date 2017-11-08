@@ -1,11 +1,11 @@
 [Unit]
-Description=Gunicorn application server handling {{ project_name }}
+Description=Gunicorn application server handling {{ web_app_project_name }}
 After=network.target
 
 [Service]
 User={{ app_user }}
 Group=nginx
-WorkingDirectory={{ app_base_path }}
+WorkingDirectory={{ web_app_base_path }}
 Environment="Path={{ python_virtualenv_path }}/bin"
 ExecStart={{ python_virtualenv_path }}/bin/gunicorn --bind unix:{{ nginx_gunicorn_socket_path }} --access-logfile /var/log/gunicorn/gunicorn.log --error-logfile /var/log/gunicorn/gunicorn_error.log --log-level info --config /etc/gunicorn.py etsin_finder.finder:app
 Restart=always

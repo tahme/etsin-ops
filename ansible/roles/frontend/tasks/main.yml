@@ -4,7 +4,7 @@
     shell: npm prune
     become_user: "{{ app_user }}"
     args:
-      chdir: "{{ app_frontend_path }}"
+      chdir: "{{ web_app_frontend_path }}"
 
   - block:
 
@@ -12,19 +12,19 @@
         shell: ncu -u
         become_user: "{{ app_user }}"
         args:
-          chdir: "{{ app_frontend_path }}"
+          chdir: "{{ web_app_frontend_path }}"
 
       - name: Install frontend dependencies based on package.json for local development environment
         shell: npm install
         become_user: "{{ app_user }}"
         args:
-          chdir: "{{ app_frontend_path }}"
+          chdir: "{{ web_app_frontend_path }}"
 
       - name: Run frontend dev build for local development environment
         shell: npm run dev-build -- --define process.env.NODE_ENV="'development'"
         become_user: "{{ app_user }}"
         args:
-          chdir: "{{ app_frontend_path }}"
+          chdir: "{{ web_app_frontend_path }}"
 
     when: deployment_environment_id == 'local_development'
 
@@ -34,12 +34,12 @@
         shell: npm install --only=production
         become_user: "{{ app_user }}"
         args:
-          chdir: "{{ app_frontend_path }}"
+          chdir: "{{ web_app_frontend_path }}"
 
       - name: Run frontend build for NON local development environment
         shell: npm run build -- --define process.env.NODE_ENV="'test'"
         become_user: "{{ app_user }}"
         args:
-          chdir: "{{ app_frontend_path }}"
+          chdir: "{{ web_app_frontend_path }}"
 
     when: deployment_environment_id != 'local_development'
