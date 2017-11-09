@@ -1,0 +1,9 @@
+[Unit]
+Description=RabbitMQ consumer
+
+[Service]
+Type=simple
+ExecStart={{ search_app_base_path }}/run_rabbitmq_consumer.py
+
+[Install]
+WantedBy=multi-user.target

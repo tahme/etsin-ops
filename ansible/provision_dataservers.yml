@@ -6,9 +6,9 @@
   become: yes
   roles:
     - os-base
-    #- python
-    #- rabbitmq
+    - python
     - elasticsearch
+    - provision_search_app
   handlers:
     - name: restart sshd
       service: name=sshd state=restarted

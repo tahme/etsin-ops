@@ -1,0 +1,78 @@
+---
+
+  - include_role: name=app_config
+
+  - name: Create search app logging folder to {{ search_app_log_base_path }}
+    file: path={{ search_app_log_base_path }} state=directory owner={{ app_user }} group=etsin mode=0755
+
+  - name: Create folder {{ search_app_base_path }} for the search app
+    file: path={{ search_app_base_path }} state=directory owner={{ app_user }} group=etsin mode=0755
+
+  - name: Clone project repo from branch {{ search_app_github_repo_branch }} to {{ search_app_base_path }}
+    git: repo={{ search_app_github_repo }} dest={{ search_app_base_path }} version={{ search_app_github_repo_branch }}
+    become_user: "{{ app_user }}"
+    ignore_errors: yes
+
+  - name: Update search app python package requirements to their latest versions
+    shell: pur --force --requirement {{ search_app_base_path }}/requirements.txt
+    become_user: "{{ app_user }}"
+    when: deployment_environment_id == 'local_development'
+
+  - name: Install search app python package requirements
+    pip: requirements={{ search_app_base_path }}/requirements.txt virtualenv={{ python_virtualenv_path }}
+    become_user: "{{ app_user }}"
+
+  - name: Create directory {{ search_app_scripts_path }} for search app scripts
+    file: path={{ search_app_scripts_path }} state=directory owner={{ app_user }} group=etsin mode=0755
+
+  - name: Copy search app script 1 to {{ search_app_scripts_path }}
+    template: src=create_empty_index.sh dest={{ search_app_scripts_path }} mode=0755 force=yes
+
+  - name: Copy search app script 2 to {{ search_app_scripts_path }}
+    template: src=delete_index.sh dest={{ search_app_scripts_path }} mode=0755 force=yes
+
+  - name: Copy search app script 3 to {{ search_app_scripts_path }}
+    template: src=load_test_data_to_index.sh dest={{ search_app_scripts_path }} mode=0755 force=yes
+
+  - name: Copy search app script 4 to {{ search_app_scripts_path }}
+    template: src=reindex_by_recreating_index.sh dest={{ search_app_scripts_path }} mode=0755 force=yes
+
+  - name: Copy search app script 5 to {{ search_app_scripts_path }}
+    template: src=reindex_without_recreating_index.sh dest={{ search_app_scripts_path }} mode=0755 force=yes
+
+  - name: Create empty search index
+    shell: su - {{ app_user }} -c '{{ search_app_scripts_path }}/create_empty_index.sh'
+
+  - name: Create cronjob for running reindexing script that does not recreate the search index
+    cron:
+      name: "Reindex search index without recreating the search index"
+      minute: "00"
+      hour: "5"
+      weekday: "1-6"
+      job: "{{ search_app_scripts_path }}/reindex_without_recreating_index.sh"
+      state: present
+      user: "{{ app_user }}"
+
+  - name: Create cronjob for running reindexing script that recreates the search index
+    cron:
+      name: "Reindex search index by recreating the search index"
+      minute: "00"
+      hour: "5"
+      weekday: "7"
+      job: "{{ search_app_scripts_path }}/reindex_by_recreating_index.sh"
+      state: present
+      user: "{{ app_user }}"
+
+  - name: Copy RabbitMQ service file
+    template: src=rabbitmq-consumer.service dest=/lib/systemd/system mode=0644 force=yes
+
+  - name: Reload systemd
+    systemd: daemon_reload=yes name=rabbitmq-consumer
+
+  - name: Enable RabbitMQ service
+    systemd:
+      name: rabbitmq-consumer
+      enabled: yes
+
+  - name: Start RabbitMQ consumer
+    systemd: state=started name=rabbitmq-consumer

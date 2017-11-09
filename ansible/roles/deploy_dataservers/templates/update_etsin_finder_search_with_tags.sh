@@ -1,6 +1,6 @@
 if [ "$#" -ne 1 ]
 then
-  echo "Give exactly one tag name for etsin-finder"
+  echo "Give exactly one tag name for etsin-finder-search"
   echo "Example: '$0 v0.1.0'"
   exit 2
 fi
@@ -11,6 +11,6 @@ if [ "$USER" != "{{ app_user }}" ]; then
 fi
 
 source {{ python_virtualenv_path }}/bin/activate
-cd {{ web_app_base_path }}
+cd {{ search_app_base_path }}
 
 git fetch --all --tags --prune && git checkout $1

@@ -1,4 +1,5 @@
-app_base_path: "/etsin/{{ project_name }}"
+web_app_base_path: "/etsin/{{ web_app_project_name }}"
+search_app_base_path: "/etsin/{{ search_app_project_name }}"
 
 webserver_1_internal_ip: 127.0.0.1
 dbserver_1_internal_ip: 127.0.0.1
@@ -6,7 +7,8 @@ dataserver_1_internal_ip: 127.0.0.1
 
 deployment_environment_id: local_development
 server_certificate_name: nginx-selfsigned
-project_repo_branch: test
+web_app_github_repo_branch: test
+search_app_github_repo_branch: test
 server_domain_name: etsin-finder.local
 
 nginx_es_credentials:
@@ -33,7 +35,7 @@ elasticsearch:
   hosts: 127.0.0.1
   port: 9200
   use_ssl: False
-  
+
 rabbitmq:
   hosts: localhost
   port: 5672

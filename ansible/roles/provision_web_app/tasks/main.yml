@@ -1,0 +1,34 @@
+---
+
+  - include_role: name=app_config
+
+  - name: Create web app logging folder to {{ web_app_log_base_path }}
+    file: path={{ web_app_log_base_path }} state=directory owner={{ app_user }} group=etsin mode=0755
+
+  - name: Create folder {{ web_app_base_path }} for the web app
+    file: path={{ web_app_base_path }} state=directory owner={{ app_user }} group=etsin mode=0755
+
+  - name: Clone project repo from branch {{ web_app_github_repo_branch }} to {{ web_app_base_path }}
+    git: repo={{ web_app_github_repo }} dest={{ web_app_base_path }} version={{ web_app_github_repo_branch }}
+    become_user: "{{ app_user }}"
+    ignore_errors: yes
+
+  - name: Update app python package requirements to their latest versions
+    shell: pur --force --requirement {{ web_app_base_path }}/requirements.txt
+    become_user: "{{ app_user }}"
+    when: deployment_environment_id == 'local_development'
+
+  - name: Install web app python package requirements
+    pip: requirements={{ web_app_base_path }}/requirements.txt virtualenv={{ python_virtualenv_path }}
+    become_user: "{{ app_user }}"
+
+  - include_role: name=gunicorn
+
+  - name: Install NPM
+    yum: name=npm state=latest
+
+  - name: Install npm-check-updates
+    npm: name=npm-check-updates state=latest global=yes
+    when: deployment_environment_id == 'local_development'
+
+  - include_role: name=frontend
