@@ -16,7 +16,7 @@
         state: present
         line: 'ETSIN_DATABASE_USER="{{ etsin_database.user }}"'
   roles:
-    - os-base
+    - { role: os-base, when: deployment_environment_id != 'local_development'}
     - postgres
     - backup
   handlers:

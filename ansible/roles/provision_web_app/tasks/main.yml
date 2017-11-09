@@ -32,3 +32,7 @@
     when: deployment_environment_id == 'local_development'
 
   - include_role: name=frontend
+
+  - debug:
+      msg: "Local dev environment successfully set up. Run commands 'sudo su - {{ app_user }}' and 'runserver' to run the app."
+    when: deployment_environment_id == 'local_development'

@@ -5,8 +5,8 @@
     is_provision: true
   become: yes
   roles:
-    - os-base
-    - python
+    - { role: os-base, when: deployment_environment_id != 'local_development'}
+    - { role: python, when: deployment_environment_id != 'local_development'}
     - nginx
     - provision_web_app
   handlers:

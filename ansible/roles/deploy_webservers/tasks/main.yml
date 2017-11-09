@@ -11,11 +11,12 @@
 
   when: deployment_environment_id in ['local_development', 'test', 'stable']
 
+# Copy app_config only in envs which are not deployed via Travis CI
 - block:
 
     - include_role: name=app_config
 
-  when: deployment_environment_id in ['local_development', 'playground', 'staging', 'production']
+  when: deployment_environment_id in ['local_development', 'staging', 'production']
 
 - block:
 
@@ -50,7 +51,3 @@
 - name: Make sure gunicorn service is restarted
   service: name=gunicorn state=restarted enabled=yes
   when: deployment_environment_id != 'local_development'
-
-- debug:
-    msg: "Local dev environment successfully set up. Run commands 'sudo su - {{ app_user }}' and 'runserver' to run the app."
-  when: deployment_environment_id == 'local_development'

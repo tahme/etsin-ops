@@ -11,11 +11,12 @@
 
     when: deployment_environment_id in ['local_development', 'test', 'stable']
 
+  # Copy app_config only in envs which are not deployed via Travis CI
   - block:
 
       - include_role: name=app_config
 
-    when: deployment_environment_id in ['local_development', 'playground', 'staging', 'production']
+    when: deployment_environment_id in ['local_development', 'staging', 'production']
 
   - block:
 
@@ -42,6 +43,6 @@
     pip: requirements={{ search_app_base_path }}/requirements.txt virtualenv={{ python_virtualenv_path }}
     become_user: "{{ app_user }}"
 
-  - name: Load test data
+  - name: Create search index in case it does not exist already and load test data to the search index
     shell: su - {{ app_user }} -c '{{ search_app_scripts_path }}/load_test_data_to_index.sh'
     when: deployment_environment_id in ['local_development', 'test']
