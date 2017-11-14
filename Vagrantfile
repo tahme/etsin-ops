@@ -41,6 +41,7 @@ Vagrant.configure("2") do |config|
     end
 
     server.vm.provision "shell", inline: $script
+    server.vm.provision "shell", run: "always", inline: "sudo systemctl restart rabbitmq-consumer"
 
     server.vm.provider "virtualbox" do |vbox|
         vbox.name = "etsin_local_development"

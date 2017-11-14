@@ -4,6 +4,8 @@ Description=RabbitMQ consumer
 [Service]
 Type=simple
 ExecStart={{python_virtualenv_path}}/bin/python {{ search_app_base_path }}/run_rabbitmq_consumer.py
+Restart=on-failure
+RestartSec=60
 
 [Install]
 WantedBy=multi-user.target
