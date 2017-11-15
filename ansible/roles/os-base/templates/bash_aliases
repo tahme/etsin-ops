@@ -9,9 +9,13 @@ alias tail_app_log='tail -f -n 200 {{ web_app_log_base_path }}/{{ web_app_projec
 alias tail_reindexing_log='tail -f -n 200 {{ search_app_log_base_path }}/{{ search_app_project_name }}.log'
 # Run tests in virtual environment
 alias run_flask_tests='cd {{ web_app_base_path }} && pytest --cov=etsin_finder tests/ && cd -'
+alias run_flask_flake8='cd {{ web_app_base_path }} && flake8 .'
+alias run_search_flake8='cd {{ search_app_base_path }} && flake8 .'
 alias runserver='cd {{ web_app_base_path }} && sudo {{ python_virtualenv_path }}/bin/gunicorn --bind unix:{{ nginx_gunicorn_socket_path }} --user {{ app_user }} --group nginx --access-logfile - --error-logfile - --config /etc/gunicorn.py --group nginx --reload etsin_finder.finder:app'
 alias npmwatch='cd {{ web_app_frontend_path }} && npm run watch'
 alias delete_index='{{ search_app_scripts_path }}/delete_index.sh'
 alias create_index='{{ search_app_scripts_path }}/create_empty_index.sh'
 alias load_test_data_to_index='{{ search_app_scripts_path }}/load_test_data_to_index.sh'
 alias run_search_tests='cd {{ search_app_base_path }} && pytest --cov=etsin_finder_search tests/ && cd -'
+alias run_frontend_tests='cd {{ web_app_frontend_path }} && npm run test && cd -'
+alias run_frontend_lint='cd {{ web_app_frontend_path }} && npm run lint && cd -'
