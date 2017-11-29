@@ -21,7 +21,7 @@
           chdir: "{{ web_app_frontend_path }}"
 
       - name: Run frontend dev build for local development environment
-        shell: npm run dev-build -- --define process.env.NODE_ENV="'development'"
+        shell: npm run dev-build
         become_user: "{{ app_user }}"
         args:
           chdir: "{{ web_app_frontend_path }}"
