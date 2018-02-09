@@ -1,5 +1,5 @@
 ---
-  
+
   - include_role: name=app_config
 
   - name: Create search app logging folder to {{ search_app_log_base_path }}
@@ -42,11 +42,11 @@
 
   - name: Create empty search index in case it does not exist already
     shell: su - {{ app_user }} -c '{{ search_app_scripts_path }}/create_empty_index.sh'
-    when: deployment_environment_id not in ['local_development', 'test']
+    when: deployment_environment_id not in ['local_development', 'test', 'stable']
 
   - name: Create search index in case it does not exist already and load test data into the search index
     shell: su - {{ app_user }} -c '{{ search_app_scripts_path }}/load_test_data_to_index.sh'
-    when: deployment_environment_id in ['local_development', 'test']
+    when: deployment_environment_id in ['local_development', 'test', 'stable']
 
   - name: Create cronjob for running reindexing script that does not recreate the search index
     cron:
