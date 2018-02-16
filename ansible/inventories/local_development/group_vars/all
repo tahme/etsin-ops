@@ -22,7 +22,13 @@ etsin_database:
 app_log_level: DEBUG
 app_debug_mode: True
 app_secret_key: cb1c9f28f16ddd1e41fb47e12d4a73f9ed76d6df93c54f31
-app_template_reload: True
+
+app_mail_suppress_send: True
+app_mail_server: localhost
+app_mail_port: 25
+app_mail_username: ~
+app_mail_password: ~
+app_mail_default_sender: donotreply@etsin.fi
 
 elasticsearch_instance:
   node_name: "node1"

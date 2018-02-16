@@ -11,7 +11,7 @@ def max_workers():
 max_requests = 1000
 worker_class = 'gevent'
 workers = max_workers()
-preload_app = True
+preload_app = False
 
 secure_scheme_headers = {
     'X-FORWARDED-PROTOCOL': 'ssl',

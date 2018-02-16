@@ -9,7 +9,14 @@ SEARCH_APP_LOG_PATH: {{ search_app_log_base_path }}/{{ search_app_project_name }
 # Variables related to etsin_finder app config
 DEBUG: {{ app_debug_mode }}
 SECRET_KEY: {{ app_secret_key }}
-TEMPLATES_AUTO_RELOAD: {{ app_template_reload }}
+
+# Variables related to etsin_finder app emails
+MAIL_SUPPRESS_SEND: {{ app_mail_suppress_send }}
+MAIL_SERVER: {{ app_mail_server }}
+MAIL_PORT: {{ app_mail_port }}
+MAIL_USERNAME: {{ app_mail_username }}
+MAIL_PASSWORD: {{ app_mail_password }}
+MAIL_DEFAULT_SENDER: {{ app_mail_default_sender }}
 
 # Variables related to database
 ETSIN_DATABASE: {{ etsin_database.name }}
