@@ -43,6 +43,10 @@
     pip: requirements={{ search_app_base_path }}/requirements.txt virtualenv={{ python_virtualenv_path }}
     become_user: "{{ app_user }}"
 
-  - name: Create search index in case it does not exist already and load test data to the search index
+  - name: Delete search index
+    shell: su - {{ app_user }} -c '{{ search_app_scripts_path }}/delete_index.sh'
+    when: deployment_environment_id in ['test', 'stable']
+
+  - name: Create search index in case it does not exist already and load test data there
     shell: su - {{ app_user }} -c '{{ search_app_scripts_path }}/load_test_data_to_index.sh'
     when: deployment_environment_id in ['local_development', 'test', 'stable']
