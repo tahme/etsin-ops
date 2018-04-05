@@ -1,0 +1,39 @@
+{
+    "strict": {{ saml.strict | to_json }},
+    "debug": {{ saml.debug | to_json }},
+    "sp": {
+        "entityId": "{{ saml.sp_entity_id }}",
+        "assertionConsumerService": {
+            "url": "{{ saml.sp_acs_url }}",
+            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+        },
+        "singleLogoutService": {
+            "url": "{{ saml.sp_sls_url }}",
+            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+        },
+        "attributeConsumingService": {
+            "serviceName": "Etsin Research Data Finder",
+            "serviceDescription": "Search and download research data",
+            "requestedAttributes": [
+                {
+                    "name": "urn:oid:1.3.6.1.4.1.5923.1.1.1.6",
+                    "isRequired": false,
+                    "nameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
+                    "friendlyName": "eduPersonPrincipalName",
+                    "attributeValue": []
+                }
+            ]
+        },
+        "NameIDFormat": "urn:oasis:names:tc:SAML:2.0:nameid-format:transient",
+        "x509cert": "{{ saml.sp_x509_cert }}",
+        "privateKey": "{{ saml.sp_private_key }}"
+    },
+    "idp": {
+        "entityId": "{{ saml.idp_entity_id }}",
+        "singleSignOnService": {
+            "url": "{{ saml.idp_sso_url }}",
+            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+        },
+        "x509cert": "{{ saml.idp_x509_cert }}"
+    }
+}

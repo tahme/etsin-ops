@@ -2,6 +2,8 @@
 
   - include_role: name=app_config
 
+  - include_role: name=saml_config
+
   - name: Create web app logging folder to {{ web_app_log_base_path }}
     file: path={{ web_app_log_base_path }} state=directory owner={{ app_user }} group=etsin mode=0755
 
