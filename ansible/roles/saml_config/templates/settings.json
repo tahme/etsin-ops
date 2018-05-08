@@ -17,9 +17,16 @@
             "requestedAttributes": [
                 {
                     "name": "urn:oid:1.3.6.1.4.1.5923.1.1.1.6",
-                    "isRequired": false,
+                    "isRequired": true,
                     "nameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
                     "friendlyName": "eduPersonPrincipalName",
+                    "attributeValue": []
+                },
+                {
+                    "name": "urn:oid:2.5.4.3",
+                    "isRequired": true,
+                    "nameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
+                    "friendlyName": "cn",
                     "attributeValue": []
                 }
             ]
