@@ -3,7 +3,7 @@
   - include_role: name=update_packages
 
   - name: Ensure log files are owned by {{ app_user }}
-    file: path={{ search_app_log_base_path }} owner={{ app_user }} group=etsin mode=640 recurse=yes
+    file: path={{ search_app_log_base_path }} owner={{ app_user }} group=etsin mode=740 recurse=yes
 
   - block:
 
