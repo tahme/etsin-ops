@@ -1,91 +1,93 @@
 ---
 
-- include_role: name=update_packages
+  - include_role: name=update_packages
+
+  - name: Ensure log files are owned by {{ app_user }}
+    file: path={{ web_app_log_base_path }} owner={{ app_user }} group=etsin mode=640 recurse=yes
+
+  - name: Install latest python pip, setuptools and pur
+    pip: name={{ item }} state=latest
+    with_items:
+      - pip
+      - setuptools
+      - pur
+
+  - block:
+
+      - name: Pull latest data from web app project remote repo branch {{ web_app_github_repo_branch }}
+        git: repo={{ web_app_github_repo }} dest={{ web_app_base_path }} version={{ web_app_github_repo_branch }}
+        become_user: "{{ app_user }}"
+        register: pull_cmd
+        ignore_errors: yes
+
+      - block:
+
+          - name: Stash repo changes since most likely git pull failed because of modifications in the local repo
+            command: git stash
+            args:
+              chdir: "{{ web_app_base_path }}"
+
+          - name: Re-pull latest data from project remote repo branch {{ web_app_github_repo_branch }}
+            git: repo={{ web_app_github_repo }} dest={{ web_app_base_path }} version={{ web_app_github_repo_branch }}
+            become_user: "{{ app_user }}"
+
+          - name: Unstash git repo
+            shell: git stash apply
+            args:
+              executable: /bin/bash
+              chdir: "{{ web_app_base_path }}"
+            become_user: "{{ app_user }}"
+
+        when: pull_cmd.failed
+
+    when: deployment_environment_id == 'local_development'
+
+  - block:
+
+      - name: Pull latest data from web app project remote repo branch {{ web_app_github_repo_branch }}
+        git: repo={{ web_app_github_repo }} dest={{ web_app_base_path }} version={{ web_app_github_repo_branch }}
+        become_user: "{{ app_user }}"
+
+    when: deployment_environment_id in ['test', 'stable']
 
 
-- name: Install latest python pip, setuptools and pur
-  pip: name={{ item }} state=latest
-  with_items:
-    - pip
-    - setuptools
-    - pur
+  # Copy app_config only in envs which are not deployed via Travis CI
+  - block:
 
-- block:
+      - include_role: name=app_config
 
-    - name: Pull latest data from web app project remote repo branch {{ web_app_github_repo_branch }}
-      git: repo={{ web_app_github_repo }} dest={{ web_app_base_path }} version={{ web_app_github_repo_branch }}
-      become_user: "{{ app_user }}"
-      register: pull_cmd
-      ignore_errors: yes
+    when: deployment_environment_id in ['local_development', 'staging', 'production']
 
-    - block:
+  - block:
 
-        - name: Stash repo changes since most likely git pull failed because of modifications in the local repo
-          command: git stash
-          args:
-            chdir: "{{ web_app_base_path }}"
+      - name: Copy deployment script to remote
+        template: src=templates/update_etsin_finder_with_tags.sh dest=/tmp/update_etsin_finder_with_tags.sh owner={{ app_user }} mode=500
 
-        - name: Re-pull latest data from project remote repo branch {{ web_app_github_repo_branch }}
-          git: repo={{ web_app_github_repo }} dest={{ web_app_base_path }} version={{ web_app_github_repo_branch }}
-          become_user: "{{ app_user }}"
+      - name: Fetch tags, checkout the tag {{ etsin_finder_tag }}
+        shell: /tmp/update_etsin_finder_with_tags.sh {{ etsin_finder_tag }}
+        register: shell_result
+        become_user: "{{ app_user }}"
 
-        - name: Unstash git repo
-          shell: git stash apply
-          args:
-            executable: /bin/bash
-            chdir: "{{ web_app_base_path }}"
-          become_user: "{{ app_user }}"
+      - name: Print script output
+        debug:
+          var: shell_result.stdout_lines
 
-      when: pull_cmd.failed
+    when: deployment_environment_id in ['staging', 'production']
 
-  when: deployment_environment_id == 'local_development'
+  - name: Update web app python package requirements to their latest versions
+    shell: pur --force --requirement {{ web_app_base_path }}/requirements.txt
+    become_user: "{{ app_user }}"
+    when: deployment_environment_id == 'local_development'
 
-- block:
+  - name: Install web app python package requirements
+    pip: requirements={{ web_app_base_path }}/requirements.txt virtualenv={{ python_virtualenv_path }}
+    become_user: "{{ app_user }}"
 
-    - name: Pull latest data from web app project remote repo branch {{ web_app_github_repo_branch }}
-      git: repo={{ web_app_github_repo }} dest={{ web_app_base_path }} version={{ web_app_github_repo_branch }}
-      become_user: "{{ app_user }}"
+  - include_role: name=frontend
 
-  when: deployment_environment_id in ['test', 'stable']
+  - name: Make sure nginx server is restarted
+    service: name=nginx state=restarted enabled=yes
 
-
-# Copy app_config only in envs which are not deployed via Travis CI
-- block:
-
-    - include_role: name=app_config
-
-  when: deployment_environment_id in ['local_development', 'staging', 'production']
-
-- block:
-
-    - name: Copy deployment script to remote
-      template: src=templates/update_etsin_finder_with_tags.sh dest=/tmp/update_etsin_finder_with_tags.sh owner={{ app_user }} mode=500
-
-    - name: Fetch tags, checkout the tag {{ etsin_finder_tag }}
-      shell: /tmp/update_etsin_finder_with_tags.sh {{ etsin_finder_tag }}
-      register: shell_result
-      become_user: "{{ app_user }}"
-
-    - name: Print script output
-      debug:
-        var: shell_result.stdout_lines
-
-  when: deployment_environment_id in ['staging', 'production']
-
-- name: Update web app python package requirements to their latest versions
-  shell: pur --force --requirement {{ web_app_base_path }}/requirements.txt
-  become_user: "{{ app_user }}"
-  when: deployment_environment_id == 'local_development'
-
-- name: Install web app python package requirements
-  pip: requirements={{ web_app_base_path }}/requirements.txt virtualenv={{ python_virtualenv_path }}
-  become_user: "{{ app_user }}"
-
-- include_role: name=frontend
-
-- name: Make sure nginx server is restarted
-  service: name=nginx state=restarted enabled=yes
-
-- name: Make sure gunicorn service is restarted
-  service: name=gunicorn state=restarted enabled=yes
-  when: deployment_environment_id != 'local_development'
+  - name: Make sure gunicorn service is restarted
+    service: name=gunicorn state=restarted enabled=yes
+    when: deployment_environment_id != 'local_development'
