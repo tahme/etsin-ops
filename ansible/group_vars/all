@@ -12,7 +12,7 @@ web_app_log_base_path: "/var/log/{{ web_app_project_name }}"
 search_app_log_base_path: "/var/log/{{ search_app_project_name }}"
 nginx_gunicorn_socket_path: "{{ etsin_base_path }}/gunicorn/socket"
 nginx_gunicorn_proxy_pass: "http://unix:{{ nginx_gunicorn_socket_path }}"
-nginx_static_root: "{{ web_app_frontend_path }}/static/"
+nginx_static_root: "{{ web_app_frontend_path }}/build/"
 
 etsin_db_base_path: "{{ etsin_base_path }}/db"
 etsin_db_data_path: "{{ etsin_db_base_path }}/data"
