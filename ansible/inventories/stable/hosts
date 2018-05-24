@@ -1,6 +1,3 @@
-[dbservers]
-etsin-db-stable ansible_host="{{ dbserver_1_external_ip }}" ansible_connection=ssh ansible_user="{{ ssh_user }}"
-
 [webservers]
 etsin-web-stable ansible_host="{{ webserver_1_external_ip }}" ansible_connection=ssh ansible_user="{{ ssh_user }}"
 
@@ -8,6 +5,5 @@ etsin-web-stable ansible_host="{{ webserver_1_external_ip }}" ansible_connection
 etsin-data-stable ansible_host="{{ dataserver_1_external_ip }}" ansible_connection=ssh ansible_user="{{ ssh_user }}"
 
 [stable:children]
-dbservers
 webservers
 dataservers

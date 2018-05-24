@@ -2,7 +2,6 @@ web_app_base_path: "/etsin/{{ web_app_project_name }}"
 search_app_base_path: "/etsin/{{ search_app_project_name }}"
 
 webserver_1_internal_ip: 127.0.0.1
-dbserver_1_internal_ip: 127.0.0.1
 dataserver_1_internal_ip: 127.0.0.1
 
 deployment_environment_id: local_development
@@ -13,11 +12,6 @@ server_domain_name: etsin-finder.local
 
 nginx_es_credentials:
   - { username: etsin, password: test-etsin }
-
-etsin_database:
-  name: etsin_db
-  user: etsin_db_user
-  password: PFh3TXt66MZhGHPd
 
 app_log_level: DEBUG
 app_debug_mode: True

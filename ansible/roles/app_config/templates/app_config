@@ -23,12 +23,6 @@ MAIL_USERNAME: {{ app_mail_username }}
 MAIL_PASSWORD: {{ app_mail_password }}
 MAIL_DEFAULT_SENDER: {{ app_mail_default_sender }}
 
-# Variables related to database
-ETSIN_DATABASE: {{ etsin_database.name }}
-ETSIN_DATABASE_USER: {{ etsin_database.user }}
-ETSIN_DATABASE_PASSWORD: {{ etsin_database.password }}
-ETSIN_DATABASE_HOST: {{ dbserver_1_internal_ip }}
-
 # Variables related to elasticsearch
 ELASTICSEARCH:
   HOSTS: ['{{ elasticsearch.hosts}}']
