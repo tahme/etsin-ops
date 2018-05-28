@@ -13,6 +13,8 @@ server_domain_name: etsin-finder.local
 nginx_es_credentials:
   - { username: etsin, password: test-etsin }
 
+ssl_certs_path: /etc/nginx/ssl_certs
+
 app_log_level: DEBUG
 app_debug_mode: True
 app_secret_key: cb1c9f28f16ddd1e41fb47e12d4a73f9ed76d6df93c54f31
