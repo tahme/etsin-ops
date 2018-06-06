@@ -1,7 +1,5 @@
 ---
 
-  - include_role: name=update_packages
-
   - name: Ensure log files are owned by {{ app_user }}
     file: path={{ search_app_log_base_path }} owner={{ app_user }} group=etsin mode=740 recurse=yes
 
@@ -53,3 +51,6 @@
   - name: Create search index in case it does not exist already and load test data there
     shell: su - {{ app_user }} -c '{{ search_app_scripts_path }}/load_test_data_to_index.sh'
     when: deployment_environment_id in ['local_development', 'test', 'stable']
+
+  - name: Restart RabbitMQ consumer
+    systemd: state=restarted name=rabbitmq-consumer

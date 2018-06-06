@@ -1,12 +1,11 @@
 ---
 
 - hosts: webservers
-  vars:
-    is_provision: true
   become: yes
   roles:
-    - { role: os-base, when: deployment_environment_id != 'local_development'}
-    - { role: python, when: deployment_environment_id != 'local_development'}
+    - { role: os-base, when: "deployment_environment_id != 'local_development'" }
+    - { role: update_packages, when: "deployment_environment_id != 'local_development'" }
+    - { role: python, when: "deployment_environment_id != 'local_development'" }
     - nginx
     - provision_web_app
   handlers:

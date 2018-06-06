@@ -1,11 +1,10 @@
 ---
 
 - hosts: dataservers
-  vars:
-    is_provision: true
   become: yes
   roles:
     - os-base
+    - update_packages
     - python
     - elasticsearch
     - provision_search_app
