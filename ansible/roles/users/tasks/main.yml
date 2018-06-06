@@ -1,7 +1,17 @@
 ---
 
+- name: Make sure we have a 'wheel' group
+  group: name=wheel state=present
+
+- name: Allow 'wheel' group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+
 - name: Add app user to OS
-  user: name={{ app_user }} groups=wheel,etsin append=yes state=present createhome=yes
+  user: name={{ app_user }} groups=etsin append=yes state=present createhome=yes
 
 - block:
     - name: Add users that should be able to log in to OS

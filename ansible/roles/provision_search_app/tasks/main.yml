@@ -26,19 +26,19 @@
     file: path={{ search_app_scripts_path }} state=directory owner={{ app_user }} group=etsin mode=0755
 
   - name: Copy search app script 1 to {{ search_app_scripts_path }}
-    template: src=create_empty_index.sh dest={{ search_app_scripts_path }} mode=0755 force=yes
+    template: src=create_empty_index.sh dest={{ search_app_scripts_path }} mode=0755 force=yes owner={{ app_user }} group=etsin
 
   - name: Copy search app script 2 to {{ search_app_scripts_path }}
-    template: src=delete_index.sh dest={{ search_app_scripts_path }} mode=0755 force=yes
+    template: src=delete_index.sh dest={{ search_app_scripts_path }} mode=0755 force=yes owner={{ app_user }} group=etsin
 
   - name: Copy search app script 3 to {{ search_app_scripts_path }}
-    template: src=load_test_data_to_index.sh dest={{ search_app_scripts_path }} mode=0755 force=yes
+    template: src=load_test_data_to_index.sh dest={{ search_app_scripts_path }} mode=0755 force=yes owner={{ app_user }} group=etsin
 
   - name: Copy search app script 4 to {{ search_app_scripts_path }}
-    template: src=reindex_by_recreating_index.sh dest={{ search_app_scripts_path }} mode=0755 force=yes
+    template: src=reindex_by_recreating_index.sh dest={{ search_app_scripts_path }} mode=0755 force=yes owner={{ app_user }} group=etsin
 
   - name: Copy search app script 5 to {{ search_app_scripts_path }}
-    template: src=reindex_without_recreating_index.sh dest={{ search_app_scripts_path }} mode=0755 force=yes
+    template: src=reindex_without_recreating_index.sh dest={{ search_app_scripts_path }} mode=0755 force=yes owner={{ app_user }} group=etsin
 
   - name: Create empty search index in case it does not exist already
     shell: su - {{ app_user }} -c '{{ search_app_scripts_path }}/create_empty_index.sh'
@@ -54,7 +54,7 @@
       minute: "00"
       hour: "5"
       weekday: "1-6"
-      job: "{{ search_app_scripts_path }}/reindex_without_recreating_index.sh"
+      job: "{{ search_app_scripts_path }}/reindex_without_recreating_index.sh >> {{ search_app_log_base_path }}/{{ search_app_project_name }}.log"
       state: present
       user: "{{ app_user }}"
 
@@ -64,7 +64,7 @@
       minute: "00"
       hour: "5"
       weekday: "7"
-      job: "{{ search_app_scripts_path }}/reindex_by_recreating_index.sh"
+      job: "{{ search_app_scripts_path }}/reindex_by_recreating_index.sh >> {{ search_app_log_base_path }}/{{ search_app_project_name }}.log"
       state: present
       user: "{{ app_user }}"
 

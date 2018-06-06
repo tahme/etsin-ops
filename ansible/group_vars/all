@@ -5,7 +5,7 @@ web_app_github_repo: https://github.com/CSCfi/etsin-finder
 search_app_github_repo: https://github.com/CSCfi/etsin-finder-search
 
 web_app_frontend_path: "{{ web_app_base_path }}/{{ web_app_project_name }}/frontend"
-etsin_base_path: /srv/etsin
+etsin_base_path: /usr/local/etsin
 search_app_scripts_path: "{{ etsin_base_path }}/search_scripts"
 python_virtualenv_path: "{{ etsin_base_path }}/pyenv"
 web_app_log_base_path: "/var/log/{{ web_app_project_name }}"
@@ -15,8 +15,8 @@ nginx_gunicorn_proxy_pass: "http://unix:{{ nginx_gunicorn_socket_path }}"
 nginx_static_root: "{{ web_app_frontend_path }}/build/"
 nginx_dh_param_name: nginx_dhparam.pem
 
-etsin_db_base_path: "{{ etsin_base_path }}/db"
-etsin_db_data_path: "{{ etsin_db_base_path }}/data"
-etsin_db_backup_path: "{{ etsin_db_base_path }}/backup"
-etsin_db_backup_archive_path: "{{ etsin_db_backup_path }}/archive"
-etsin_db_config_path: "{{ etsin_db_base_path }}/config"
+spacewalk_repo_gpg_keys:
+  - http://spacewalk.csc.fi/pub/RPM-GPG-KEY-CentOS-SIG-SCLo
+  - http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-7
+  - http://spacewalk.csc.fi/pub/PCADMIN-GPG-KEY
+  - http://spacewalk.csc.fi/pub/GPG-KEY-elasticsearch

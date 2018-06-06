@@ -1,15 +1,5 @@
 ---
 
-- name: Make sure we have a 'wheel' group
-  group: name=wheel state=present
-
-- name: Allow 'wheel' group to have passwordless sudo
-  lineinfile:
-    dest: /etc/sudoers
-    state: present
-    regexp: '^%wheel'
-    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
-
 - name: Make sure we have a 'etsin' group in OS
   group: name=etsin state=present
 
@@ -21,32 +11,41 @@
   when: deployment_environment_id != 'local_development'
   notify: restart sshd
 
-- name: Ensure os common packages
+- name: Install common yum packages
   yum: name={{ item }} state=latest
   with_items:
-    - '@Development tools'
+    - gcc
+    - gcc-c++
     - python-devel
-    - htop
     - git
-    - zip
-    - unzip
     - curl
     - vim
-    - ntp
-    - tree
+    - zip
+    - unzip
     - python-passlib
 
-- name: Install yum pip
+- name: Install common os packages for development
+  yum: name={{ item }} state=latest
+  with_items:
+    - htop
+    - ntp
+    - tree
+  when: deployment_environment_id not in ['staging', 'production']
+
+- name: Install pip using yum
   yum: name=python-pip state=latest
   when: deployment_environment_id != 'local_development'
 
-- name: Install latest python pip, setuptools and pur
+- name: Install latest python pip and setuptools using pip
   pip: name={{ item }} state=latest
   with_items:
     - pip
     - setuptools
-    - pur
-    
+
+- name: Install pur for updating pip dependencies using pip
+  pip: name=pur state=latest
+  when: deployment_environment_id == 'local_development'
+
 - name: Reinstall glibc-common just in case to make Finnish locale available
   shell: yum -y reinstall glibc-common
   when: deployment_environment_id == 'local_development'
@@ -75,8 +74,8 @@
 
 - include_role: name=users
 
-- name: Create /srv/etsin base directory
-  file: path=/srv/etsin state=directory owner={{ app_user }} group=etsin mode=0755
+- name: Create {{ etsin_base_path }} base directory
+  file: path={{ etsin_base_path }} state=directory owner={{ app_user }} group=etsin mode=0755
 
 - block:
 
