@@ -7,6 +7,6 @@ if [ "$USER" != "{{ app_user }}" ]; then
 fi
 
 sudo chown -R {{ app_user }}:etsin {{ search_app_log_base_path }}
-source /srv/etsin/pyenv/bin/activate
+source {{ python_virtualenv_path }}/bin/activate
 cd {{ search_app_base_path }}
 python delete_index.py

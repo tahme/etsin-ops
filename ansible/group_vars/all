@@ -10,7 +10,8 @@ search_app_scripts_path: "{{ etsin_base_path }}/search_scripts"
 python_virtualenv_path: "{{ etsin_base_path }}/pyenv"
 web_app_log_base_path: "/var/log/{{ web_app_project_name }}"
 search_app_log_base_path: "/var/log/{{ search_app_project_name }}"
-nginx_gunicorn_socket_path: "{{ etsin_base_path }}/gunicorn/socket"
+nginx_gunicorn_socket_base_path: "{{ etsin_base_path }}/gunicorn"
+nginx_gunicorn_socket_path: "{{ nginx_gunicorn_socket_base_path }}/socket"
 nginx_gunicorn_proxy_pass: "http://unix:{{ nginx_gunicorn_socket_path }}"
 nginx_static_root: "{{ web_app_frontend_path }}/build/"
 nginx_dh_param_name: nginx_dhparam.pem
@@ -20,3 +21,4 @@ spacewalk_repo_gpg_keys:
   - http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-7
   - http://spacewalk.csc.fi/pub/PCADMIN-GPG-KEY
   - http://spacewalk.csc.fi/pub/GPG-KEY-elasticsearch
+  - http://spacewalk.csc.fi/pub/RPM-GPG-KEY-PGDG-96

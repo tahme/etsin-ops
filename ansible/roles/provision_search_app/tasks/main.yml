@@ -68,16 +68,16 @@
       state: present
       user: "{{ app_user }}"
 
-  - name: Copy RabbitMQ service file
+  - name: Copy RabbitMQ consumer service file
     template: src=rabbitmq-consumer.service dest=/lib/systemd/system mode=0644 force=yes
 
   - name: Reload systemd
     systemd: daemon_reload=yes name=rabbitmq-consumer
 
-  - name: Enable RabbitMQ service
+  - name: Enable RabbitMQ consumer service
     systemd:
       name: rabbitmq-consumer
       enabled: yes
 
-  - name: Start RabbitMQ consumer
+  - name: Start RabbitMQ consumer service
     systemd: state=started name=rabbitmq-consumer

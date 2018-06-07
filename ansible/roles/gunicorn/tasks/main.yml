@@ -3,8 +3,8 @@
 - name: Copy gunicorn config file
   template: src=templates/gunicorn_conf.py dest=/etc/gunicorn.py
 
-- name: Create {{ etsin_base_path }}/gunicorn for gunicorn unix socket
-  file: path={{ etsin_base_path }}/gunicorn state=directory owner={{ app_user }} group=nginx mode=0770
+- name: Create {{ nginx_gunicorn_socket_base_path }} for gunicorn unix socket
+  file: path={{ nginx_gunicorn_socket_base_path }} state=directory owner={{ app_user }} group=nginx mode=0770
 
 - block:
 
