@@ -1,5 +1,5 @@
 ---
-  
+
   - include_role: name=app_config
 
   - name: Create search app logging folder to {{ search_app_log_base_path }}
@@ -87,5 +87,3 @@
     systemd:
       state: started
       name: rabbitmq-consumer
-    become_user: "{{ app_user }}"
-    become_method: sudo

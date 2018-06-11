@@ -53,4 +53,6 @@
     when: deployment_environment_id in ['local_development', 'test', 'stable']
 
   - name: Restart RabbitMQ consumer
-    systemd: state=restarted name=rabbitmq-consumer
+    systemd:
+      state: restarted
+      name: rabbitmq-consumer
