@@ -3,6 +3,7 @@ Description=RabbitMQ consumer
 
 [Service]
 Type=simple
+User={{ app_user }}
 ExecStart={{python_virtualenv_path}}/bin/python {{ search_app_base_path }}/run_rabbitmq_consumer.py
 Restart=on-failure
 RestartSec=60
