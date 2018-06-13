@@ -15,19 +15,19 @@
     },
     "contactPerson": {
         "technical": {
-            "givenName": "technical_name",
-            "emailAddress": "technical@example.com"
+            "givenName": "CSC Servicedesk",
+            "emailAddress": "servicedesk@csc.fi"
         },
         "support": {
-            "givenName": "support_name",
-            "emailAddress": "support@example.com"
+            "givenName": "CSC Servicedesk",
+            "emailAddress": "servicedesk@csc.fi"
         }
     },
     "organization": {
         "en-US": {
-            "name": "sp_test",
-            "displayname": "SP test",
-            "url": "http://sp.example.com"
+            "name": "CSC",
+            "displayname": "CSC",
+            "url": "https://www.csc.fi/"
         }
     }
 }
