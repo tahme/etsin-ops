@@ -1,4 +1,4 @@
 ---
 
-- include: provision_dataservers.yml
-- include: provision_webservers.yml
+- import_playbook: provision_dataservers.yml
+- import_playbook: provision_webservers.yml
