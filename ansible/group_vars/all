@@ -17,6 +17,7 @@ nginx_static_root: "{{ web_app_frontend_path }}/build/"
 nginx_dh_param_name: nginx_dhparam.pem
 
 spacewalk_repo_gpg_keys:
+  - http://spacewalk.csc.fi/pub/rpm-gpg-keys/RPM-GPG-KEY-spacewalk-2015
   - http://spacewalk.csc.fi/pub/RPM-GPG-KEY-CentOS-SIG-SCLo
   - http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-7
   - http://spacewalk.csc.fi/pub/PCADMIN-GPG-KEY
