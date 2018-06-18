@@ -25,7 +25,7 @@ app_mail_server: localhost
 app_mail_port: 25
 app_mail_username: ~
 app_mail_password: ~
-app_mail_default_sender: etsin-no-reply@fairdata.fi
+app_mail_default_sender: noreply@fairdata.fi
 
 elasticsearch_instance:
   node_name: "node1"
