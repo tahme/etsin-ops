@@ -1,6 +1,6 @@
 ---
 
-- hosts: webservers
+- hosts: all
   become: yes
   roles:
     - app_config
