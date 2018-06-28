@@ -3,19 +3,23 @@
 - name: Copy gunicorn config file
   template: src=templates/gunicorn_conf.py dest=/etc/gunicorn.py
 
+# This folder must be owned by nginx, otherwise connection between nginx and gunicorn won't work
 - name: Create {{ nginx_gunicorn_socket_base_path }} for gunicorn unix socket
   file: path={{ nginx_gunicorn_socket_base_path }} state=directory owner={{ app_user }} group=nginx mode=0770
 
 - block:
 
     - name: Create gunicorn logging directory
-      file: path=/var/log/gunicorn state=directory owner={{ app_user }} group=nginx
+      file: path=/var/log/gunicorn state=directory owner={{ app_user }} group=etsin
 
     - name: Create gunicorn log files and ensure file permissions
-      copy: content="" dest=/var/log/gunicorn/{{ item }}.log force=no owner={{ app_user }} group=nginx mode=0755
+      copy: content="" dest=/var/log/gunicorn/{{ item }}.log force=no owner={{ app_user }} group=etsin mode=0755
       with_items:
         - gunicorn
         - gunicorn_error
+
+    - name: Create logrotate entry for gunicorn log file
+      template: src=templates/logrotate_gunicorn dest=/etc/logrotate.d/gunicorn
 
     - name: Copy gunicorn service file
       template: src=templates/gunicorn.service dest=/usr/lib/systemd/system/gunicorn.service
