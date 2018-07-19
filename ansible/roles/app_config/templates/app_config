@@ -31,7 +31,7 @@ ELASTICSEARCH:
 
 # Variables related to Metax rabbitmq
 METAX_RABBITMQ:
-  HOST: {{ metax_rabbitmq.host }}
+  HOSTS: {{ metax_rabbitmq.hosts | to_nice_json }}
   PORT: {{ metax_rabbitmq.port }}
   VHOST: {{ metax_rabbitmq.vhost }}
   EXCHANGE: {{ metax_rabbitmq.exchange }}

@@ -39,16 +39,3 @@ elasticsearch:
   hosts: 127.0.0.1
   port: 9200
   use_ssl: False
-
-rabbitmq:
-  hosts: localhost
-  port: 5672
-  vhost: etsin
-
-  # admin user
-  admin_user: admin
-  admin_password: U4rwRkkq3TRSRZDu
-
-  # main user/publisher
-  user: etsin-user
-  password: M3cVwCxZNDwAh7HU

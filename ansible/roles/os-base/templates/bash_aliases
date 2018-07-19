@@ -3,12 +3,13 @@
 
 # Generally useful
 alias aliases='cat ~/.bash_aliases'
-alias etsin_src='cd {{ web_app_base_path }}'
+alias finder_src='cd {{ web_app_base_path }}'
+alias search_src='cd {{ search_app_base_path }}'
 alias source_pyenv='source {{ python_virtualenv_path }}/bin/activate'
-alias tail_app_log='tail -f -n 200 {{ web_app_log_base_path }}/{{ web_app_project_name }}.log'
-alias tail_reindexing_log='tail -f -n 200 {{ search_app_log_base_path }}/{{ search_app_project_name }}.log'
-alias run_flask_tests='cd {{ web_app_base_path }} && pytest --cov=etsin_finder tests/ && cd -'
-alias run_flask_flake8='cd {{ web_app_base_path }} && flake8 .'
+alias tail_finder_log='tail -f -n 200 {{ web_app_log_base_path }}/{{ web_app_project_name }}.log'
+alias tail_search_log='tail -f -n 200 {{ search_app_log_base_path }}/{{ search_app_project_name }}.log'
+alias run_finder_flask_tests='cd {{ web_app_base_path }} && pytest --cov=etsin_finder tests/ && cd -'
+alias run_finder_flake8='cd {{ web_app_base_path }} && flake8 .'
 alias run_search_flake8='cd {{ search_app_base_path }} && flake8 .'
 alias runserver='cd {{ web_app_base_path }} && {{ python_virtualenv_path }}/bin/gunicorn --bind unix:{{ nginx_gunicorn_socket_path }} --access-logfile - --error-logfile - --config /etc/gunicorn.py --reload etsin_finder.finder:app'
 alias npmwatch='cd {{ web_app_frontend_path }} && npm run watch'
