@@ -52,7 +52,7 @@
     warn: False
   when: deployment_environment_id == 'local_development'
 
-- name: Disable SELinux (A better approach should be come up with!)
+- name: Disable SELinux
   selinux: state=permissive policy=targeted
 
 - name: Set locale LANG to fi_FI.UTF-8
@@ -97,3 +97,5 @@
         - "aliases"
 
   when: deployment_environment_id in ['local_development', 'test', 'stable']
+
+- include_role: name=update_packages

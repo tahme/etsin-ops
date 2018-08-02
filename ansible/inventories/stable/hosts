@@ -1,9 +1,13 @@
 [webservers]
-etsin-web-stable ansible_host="{{ webserver_1_external_ip }}" ansible_connection=ssh ansible_user="{{ ssh_user }}"
+etsin-web-stable-1 ansible_host="{{ webserver_1_external_ip }}" ansible_connection=ssh ansible_user="{{ ssh_user }}"
 
 [dataservers]
-etsin-data-stable ansible_host="{{ dataserver_1_external_ip }}" ansible_connection=ssh ansible_user="{{ ssh_user }}"
+etsin-data-stable-1 ansible_host="{{ dataserver_1_external_ip }}" ansible_connection=ssh ansible_user="{{ ssh_user }}"
 
 [stable:children]
 webservers
 dataservers
+
+[distincthosts]
+etsin-host-1 ansible_host="{{ server_1_ip }}" ansible_connection=ssh ansible_user="{{ ssh_user }}"
+etsin-host-2 ansible_host="{{ server_2_ip }}" ansible_connection=ssh ansible_user="{{ ssh_user }}"

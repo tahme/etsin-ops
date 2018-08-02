@@ -13,9 +13,11 @@ etsin_finder_search/
 ansible/*.retry
 
 ansible/inventories/local_development/group_vars/local_development
-ansible/inventories/test/group_vars/test
+ansible/inventories/test/group_vars/*
+!ansible/inventories/test/group_vars/all
 ansible/inventories/test/host_vars
-ansible/inventories/stable/group_vars/stable
+ansible/inventories/stable/group_vars/*
+!ansible/inventories/stable/group_vars/all
 ansible/inventories/stable/host_vars
 ansible/inventories/staging
 ansible/inventories/production

@@ -87,3 +87,7 @@
     systemd:
       state: started
       name: rabbitmq-consumer
+
+  - debug:
+      msg: "{{ deployment_environment_id }} search app environment successfully set up."
+    when: deployment_environment_id != 'local_development'

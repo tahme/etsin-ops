@@ -29,13 +29,17 @@ app_mail_default_sender: noreply@fairdata.fi
 
 elasticsearch_instance:
   node_name: "node1"
-  allow_origin: "*"
-  is_master_node: "true"
   is_data_node: "true"
+  is_master_node: "true"
   cluster_name: etsin-es-cluster
+  allow_origin: "*"
   network_host: [_local_, "{{ dataserver_1_internal_ip }}"]
+  http_port: 9200
+  tcp_transport_port: 9300
+  heap_size: 2g
 
 elasticsearch:
-  hosts: 127.0.0.1
+  hosts:
+    - 127.0.0.1
   port: 9200
   use_ssl: False
