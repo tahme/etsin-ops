@@ -43,6 +43,7 @@ METAX_API:
   HOST: {{ metax_api.host }}
   USER: {{ metax_api.user }}
   PASSWORD: {{ metax_api.password }}
+  VERIFY_SSL: {{ metax_api.verify_ssl }}
 
 # Variables related to Fairdata Download API
 DOWNLOAD_API:
