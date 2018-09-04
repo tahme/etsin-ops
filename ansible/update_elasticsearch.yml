@@ -1,0 +1,6 @@
+---
+
+- hosts: dataservers
+  become: yes
+  roles:
+    - elasticsearch
