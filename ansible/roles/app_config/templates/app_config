@@ -48,3 +48,5 @@ METAX_API:
 # Variables related to Fairdata Download API
 DOWNLOAD_API:
   HOST: {{ download_api.host }}
+  USER: {{ download_api.user }}
+  PASSWORD: {{ download_api.password }}
