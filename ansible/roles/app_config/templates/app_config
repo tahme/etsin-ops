@@ -50,3 +50,8 @@ DOWNLOAD_API:
   HOST: {{ download_api.host }}
   USER: {{ download_api.user }}
   PASSWORD: {{ download_api.password }}
+
+# Variables related to Memcached cache
+MEMCACHED:
+  HOST: {{ memcached.host }}
+  PORT: {{ memcached.port }}

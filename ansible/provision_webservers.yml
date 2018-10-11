@@ -6,4 +6,5 @@
     - { role: os-base, when: "deployment_environment_id != 'local_development'" }
     - { role: python, when: "deployment_environment_id != 'local_development'" }
     - nginx
+    - memcached
     - provision_web_app
