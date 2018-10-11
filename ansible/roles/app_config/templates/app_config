@@ -55,3 +55,8 @@ DOWNLOAD_API:
 MEMCACHED:
   HOST: {{ memcached.host }}
   PORT: {{ memcached.port }}
+
+# Variables related to Fairdata Rems API
+FD_REMS:
+  HOST: {{ fd_rems.host }}
+  API_KEY: {{ fd_rems.api_key }}
