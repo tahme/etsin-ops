@@ -5,7 +5,7 @@
 
 # This folder must be owned by nginx, otherwise connection between nginx and gunicorn won't work
 - name: Create {{ nginx_gunicorn_socket_base_path }} for gunicorn unix socket
-  file: path={{ nginx_gunicorn_socket_base_path }} state=directory owner={{ app_user }} group=nginx mode=0770
+  file: path={{ nginx_gunicorn_socket_base_path }} state=directory owner={{ app_user }} group=etsin mode=0755
 
 - block:
 
