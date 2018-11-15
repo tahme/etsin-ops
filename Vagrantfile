@@ -12,7 +12,7 @@ if [ ! -f /vagrant_bootstrap_done.info ]; then
   sudo yum -y install epel-release python-devel libffi-devel openssl-devel git
   sudo yum -y install python-pip
   sudo pip install pip --upgrade
-  sudo pip install ansible==2.6.0
+  sudo pip install ansible
   cd /etsin/ansible
   source install_requirements.sh
   ansible-playbook site_provision.yml
@@ -31,14 +31,10 @@ Vagrant.configure("2") do |config|
     server.vm.box = "centos/7"
     server.vm.network :private_network, ip: "30.30.30.30"
 
-    case RUBY_PLATFORM
-    when /mswin|msys|mingw|cygwin|bccwin|wince|emc/
-        # Fix Windows file rights, otherwise Ansible tries to execute files
-        server.vm.synced_folder "./", "/etsin", :mount_options => ["dmode=777,fmode=777"]
-    else
-        # Basic VM synced folder mount
-        server.vm.synced_folder "", "/etsin", :mount_options => ["dmode=777,fmode=777"]
-    end
+    # Basic VM synced folder mount
+    server.vm.synced_folder "./etsin_finder", "/etsin/etsin_finder", :mount_options => ["dmode=777,fmode=777"]
+    server.vm.synced_folder "./etsin_finder_search", "/etsin/etsin_finder_search", :mount_options => ["dmode=777,fmode=777"]
+    server.vm.synced_folder "./ansible", "/etsin/ansible", :mount_options => ["dmode=775,fmode=775"]
 
     server.vm.provision "shell", inline: $script
     server.vm.provision "shell", run: "always", inline: "sudo systemctl restart rabbitmq-consumer"

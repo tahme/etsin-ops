@@ -1,10 +1,11 @@
 - name: Ensure packages required by python saml library requires are present
-  yum: name={{ item }} state=latest
-  with_items:
-    - libxml2-devel
-    - xmlsec1-devel
-    - xmlsec1-openssl-devel
-    - libtool-ltdl-devel
+  yum:
+    state: latest
+    name:
+      - libxml2-devel
+      - xmlsec1-devel
+      - xmlsec1-openssl-devel
+      - libtool-ltdl-devel
 
 - name: Copy SAML settings.json to target VM
   template: src=templates/settings.json dest=/home/{{ app_user }}/settings.json owner={{ app_user }} group=etsin mode=0440

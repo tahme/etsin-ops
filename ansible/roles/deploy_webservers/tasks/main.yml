@@ -4,11 +4,12 @@
     file: path={{ web_app_log_base_path }} owner={{ app_user }} group=etsin mode=740 recurse=yes
 
   - name: Install latest python pip, setuptools and pur
-    pip: name={{ item }} state=latest
-    with_items:
-      - pip
-      - setuptools
-      - pur
+    pip:
+      state: latest
+      name:
+        - pip
+        - setuptools
+        - pur
 
   - block:
 

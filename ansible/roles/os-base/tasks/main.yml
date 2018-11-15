@@ -12,24 +12,26 @@
   notify: restart sshd
 
 - name: Install common yum packages
-  yum: name={{ item }} state=latest
-  with_items:
-    - gcc
-    - gcc-c++
-    - python-devel
-    - git
-    - curl
-    - vim
-    - zip
-    - unzip
-    - python-passlib
+  yum:
+    state: latest
+    name:
+      - gcc
+      - gcc-c++
+      - python-devel
+      - git
+      - curl
+      - vim
+      - zip
+      - unzip
+      - python-passlib
 
 - name: Install common os packages for development
-  yum: name={{ item }} state=latest
-  with_items:
-    - htop
-    - ntp
-    - tree
+  yum:
+    state: latest
+    name:
+      - htop
+      - ntp
+      - tree
   when: deployment_environment_id not in ['staging', 'production']
 
 - name: Install pip using yum
@@ -37,10 +39,11 @@
   when: deployment_environment_id != 'local_development'
 
 - name: Install latest python pip and setuptools using pip
-  pip: name={{ item }} state=latest
-  with_items:
-    - pip
-    - setuptools
+  pip:
+    state: latest
+    name:
+      - pip
+      - setuptools
 
 - name: Install pur for updating pip dependencies using pip
   pip: name=pur state=latest
