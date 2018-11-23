@@ -24,6 +24,16 @@
     pip: requirements={{ web_app_base_path }}/requirements.txt virtualenv={{ python_virtualenv_path }}
     become_user: "{{ app_user }}"
 
+  - name: Update app python test package requirements to their latest versions
+    shell: pur --force --requirement {{ web_app_base_path }}/test_requirements.txt
+    become_user: "{{ app_user }}"
+    when: deployment_environment_id == 'local_development'
+
+  - name: Install web app python test package requirements
+    pip: requirements={{ web_app_base_path }}/test_requirements.txt virtualenv={{ python_virtualenv_path }}
+    become_user: "{{ app_user }}"
+    when: deployment_environment_id not in ['staging', 'production']
+
   - include_role: name=gunicorn
 
   - name: Install NPM
