@@ -2,6 +2,7 @@
 
 - hosts: webservers,dataservers
   become: yes
+  strategy: free
   roles:
     - app_config
 
