@@ -32,8 +32,8 @@ Vagrant.configure("2") do |config|
     server.vm.network :private_network, ip: "30.30.30.30"
 
     # Basic VM synced folder mount
-    server.vm.synced_folder "./etsin_finder", "/etsin/etsin_finder", :mount_options => ["dmode=777,fmode=777"]
-    server.vm.synced_folder "./etsin_finder_search", "/etsin/etsin_finder_search", :mount_options => ["dmode=777,fmode=777"]
+    server.vm.synced_folder "./etsin_finder", "/etsin/etsin_finder", :mount_options => ["dmode=777,fmode=777"], create: true
+    server.vm.synced_folder "./etsin_finder_search", "/etsin/etsin_finder_search", :mount_options => ["dmode=777,fmode=777"], create: true
     server.vm.synced_folder "./ansible", "/etsin/ansible", :mount_options => ["dmode=775,fmode=775"]
 
     server.vm.provision "shell", inline: $script
