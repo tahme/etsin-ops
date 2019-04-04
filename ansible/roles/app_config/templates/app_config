@@ -45,6 +45,13 @@ METAX_API:
   PASSWORD: {{ metax_api.password }}
   VERIFY_SSL: {{ metax_api.verify_ssl }}
 
+# Variables related to Metax QVAIN REST API
+METAX_QVAIN_API:
+  HOST: {{ metax_qvain_api.host }}
+  USER: {{ metax_qvain_api.user }}
+  PASSWORD: {{ metax_qvain_api.password }}
+  VERIFY_SSL: {{ metax_qvain_api.verify_ssl }}
+
 # Variables related to Fairdata Download API
 DOWNLOAD_API:
   HOST: {{ download_api.host }}
