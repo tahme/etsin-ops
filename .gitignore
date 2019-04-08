@@ -31,3 +31,6 @@ __pycache__
 
 # Mac stuff
 .DS_Store
+
+# Visual studio code stuff
+.vscode
