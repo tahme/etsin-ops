@@ -8,11 +8,11 @@
 
   - block:
 
-      - name: Update frontend dependency version numbers to latest ones
-        shell: ncu -u
-        become_user: "{{ app_user }}"
-        args:
-          chdir: "{{ web_app_frontend_path }}"
+      # - name: Update frontend dependency version numbers to latest ones
+      #   shell: ncu -u
+      #   become_user: "{{ app_user }}"
+      #   args:
+      #     chdir: "{{ web_app_frontend_path }}"
 
       - name: Install frontend dependencies based on package.json for local development environment
         shell: npm install
