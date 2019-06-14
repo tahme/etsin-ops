@@ -26,8 +26,7 @@
         args:
           chdir: "{{ web_app_frontend_path }}"
 
-    when: (deployment_environment_id == 'local_development') or
-          (deployment_environment_id == 'test')
+    when: deployment_environment_id == 'local_development'
 
   - block:
 
@@ -59,5 +58,4 @@
         when: deployment_environment_id == 'production'
 
 
-    when: (deployment_environment_id != 'local_development') or
-          (deployment_environment_id != 'test')
+    when: deployment_environment_id != 'local_development'
