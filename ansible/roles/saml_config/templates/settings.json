@@ -41,6 +41,10 @@
             "url": "{{ saml.idp_sso_url }}",
             "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
         },
+        "singleLogoutService": {
+            "url": "{{ saml.idp_sls_url }}",
+            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+        },
         "x509cert": "{{ saml.idp_x509_cert }}"
     }
 }
