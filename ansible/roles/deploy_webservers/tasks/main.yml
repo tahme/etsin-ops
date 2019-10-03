@@ -47,7 +47,7 @@
         git: repo={{ web_app_github_repo }} dest={{ web_app_base_path }} version={{ web_app_github_repo_branch }}
         become_user: "{{ app_user }}"
 
-    when: deployment_environment_id in ['test', 'stable']
+    when: deployment_environment_id in ['test', 'stable', 'demo']
 
   # Copy app_config only in envs which are not deployed via Travis CI
   - block:

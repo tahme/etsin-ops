@@ -41,7 +41,7 @@
         become_user: "{{ app_user }}"
         args:
           chdir: "{{ web_app_frontend_path }}"
-        when: deployment_environment_id in ['test', 'stable']
+        when: deployment_environment_id in ['test', 'stable', 'demo']
 
       - name: Run frontend build for production-like pouta environments
         shell: npm run build
