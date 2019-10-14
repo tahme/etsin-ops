@@ -1,7 +1,7 @@
 # Server IP addresses
 
-server_1_ip: 86.50.252.23
-server_2_ip:
+server_1_ip: 86.50.252.51
+server_2_ip: 86.50.252.50
 
 # Server IP address - system mapping
 
