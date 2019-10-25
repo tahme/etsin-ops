@@ -10,7 +10,7 @@
         become_user: "{{ app_user }}"
         ignore_errors: yes
 
-    when: deployment_environment_id in ['local_development', 'test', 'stable']
+    when: deployment_environment_id in ['local_development', 'test', 'stable', 'demo']
 
   # Copy app_config only in envs which are not deployed via Travis CI
   - block:
@@ -46,11 +46,11 @@
 
   - name: Delete search index
     shell: su - {{ app_user }} -c '{{ search_app_scripts_path }}/delete_index.sh'
-    when: deployment_environment_id in ['test', 'stable']
+    when: deployment_environment_id in ['test', 'stable', 'demo']
 
   - name: Create search index in case it does not exist already and load test data there
     shell: su - {{ app_user }} -c '{{ search_app_scripts_path }}/load_test_data_to_index.sh'
-    when: deployment_environment_id in ['local_development', 'test', 'stable']
+    when: deployment_environment_id in ['local_development', 'test', 'stable', 'demo']
 
   - name: Restart RabbitMQ consumer
     systemd:
