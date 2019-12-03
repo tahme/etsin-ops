@@ -9,6 +9,9 @@
 - name: NGINX | Copy shared_headers.conf
   template: src=templates/shared_headers.conf dest=/etc/nginx/shared_headers.conf
 
+- name: NGINX | Copy shared_ssl_configurations.conf
+  template: src=templates/shared_ssl_configurations.conf dest=/etc/nginx/shared_ssl_configurations.conf
+
 - name: NGINX | Copy api_response_headers.conf
   template: src=templates/api_response_headers.conf dest=/etc/nginx/api_response_headers.conf
 
