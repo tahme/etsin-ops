@@ -3,14 +3,6 @@
   - name: Ensure log files are owned by {{ app_user }}
     file: path={{ web_app_log_base_path }} owner={{ app_user }} group=etsin mode=740 recurse=yes
 
-  - name: Install latest python pip, setuptools and pur
-    pip:
-      state: latest
-      name:
-        - pip
-        - setuptools
-        - pur
-
   - block:
 
       - name: Pull latest data from web app project remote repo branch {{ web_app_github_repo_branch }}
@@ -72,19 +64,9 @@
 
     when: deployment_environment_id in ['staging', 'production']
 
-  - name: Update web app python package requirements to their latest versions
-    shell: pur --force --requirement {{ web_app_base_path }}/requirements.txt
-    become_user: "{{ app_user }}"
-    when: deployment_environment_id == 'local_development'
-
   - name: Install web app python package requirements
     pip: requirements={{ web_app_base_path }}/requirements.txt virtualenv={{ python_virtualenv_path }}
     become_user: "{{ app_user }}"
-
-  - name: Update app python test package requirements to their latest versions
-    shell: pur --force --requirement {{ web_app_base_path }}/test_requirements.txt
-    become_user: "{{ app_user }}"
-    when: deployment_environment_id == 'local_development'
 
   - name: Install web app python test package requirements
     pip: requirements={{ web_app_base_path }}/test_requirements.txt virtualenv={{ python_virtualenv_path }}

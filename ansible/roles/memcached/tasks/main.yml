@@ -1,5 +1,5 @@
 - name: Install Memcached
-  yum: name=memcached state=latest
+  shell: yum -y install memcached warn=false
 
 - name: Make sure Memcached is running
   service: name=memcached enabled=yes state=started
