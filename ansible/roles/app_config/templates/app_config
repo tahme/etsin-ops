@@ -66,5 +66,6 @@ MEMCACHED:
 
 # Variables related to Fairdata Rems API
 FD_REMS:
+  ENABLED: {{ fd_rems.enabled }}
   HOST: {{ fd_rems.host }}
   API_KEY: {{ fd_rems.api_key }}
