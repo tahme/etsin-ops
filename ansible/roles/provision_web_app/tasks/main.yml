@@ -33,7 +33,7 @@
     npm: name=npm-check-updates state=latest global=yes
     when: deployment_environment_id == 'local_development'
 
-  # - include_role: name=frontend
+  - include_role: name=frontend
 
   - debug:
       msg: "{{ deployment_environment_id }} web app environment successfully set up."
