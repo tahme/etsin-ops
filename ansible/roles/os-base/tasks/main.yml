@@ -1,4 +1,5 @@
 ---
+- include_role: name=update_packages
 
 - name: Make sure we have a 'etsin' group in OS
   group: name=etsin state=present
@@ -12,48 +13,50 @@
   notify: restart sshd
 
 - name: Install common yum packages
-  yum:
-    state: latest
-    name:
-      - gcc
-      - gcc-c++
-      - python-devel
-      - git
-      - curl
-      - vim
-      - zip
-      - unzip
-      - python-passlib
-
-- name: Install common os packages for development
-  yum:
-    state: latest
-    name:
-      - htop
-      - ntp
-      - tree
-  when: deployment_environment_id not in ['staging', 'production']
-
-- name: Install pip using yum
-  yum: name=python-pip state=latest
-  when: deployment_environment_id != 'local_development'
+  block:
+    - set_fact:
+        yum_packages:
+          - gcc
+          - gcc-c++
+          - python-devel
+          - git
+          - curl
+          - vim
+          - zip
+          - unzip
+          - python-passlib
+          - python-pip
+          - python-virtualenv
+          - rng-tools
+        yum_dev_packages: 
+          - htop
+          - ntp
+          - tree
+    - set_fact:
+        yum_packages: "{{ yum_packages + yum_dev_packages }}"
+      when: deployment_environment_id not in ['staging', 'production']
+    - shell: yum -y --setopt=tsflags=nodocs install {{ yum_packages | join(' ') }}
+      args:
+        warn: False
 
 - name: Install latest python pip and setuptools using pip
-  pip:
-    state: latest
-    name:
-      - pip
-      - setuptools
+  block:
+    - set_fact:
+        pip_packages:
+          - pip
+          - setuptools
+        pip_dev_packages:
+          - pur
+    - set_fact:
+        pip_packages: "{{ pip_packages + pip_dev_packages }}"
+      when: deployment_environment_id == 'local_development'
+    - shell: pip install {{ pip_packages | join(' ') }}
 
-- name: Install pur for updating pip dependencies using pip
-  pip: name=pur state=latest
-  when: deployment_environment_id == 'local_development'
-
-- name: Reinstall glibc-common just in case to make Finnish locale available
-  shell: yum -y reinstall glibc-common
-  args:
-    warn: False
-  when: deployment_environment_id == 'local_development'
+- name: Start and enable rngd
+  systemd:
+    name: rngd
+    state: started
+    enabled: yes
 
 - name: Disable SELinux
   selinux: state=permissive policy=targeted
@@ -99,6 +102,7 @@
         - "source .bash_aliases"
         - "aliases"
 
+    - meta: reset_connection
+
   when: deployment_environment_id in ['local_development', 'test', 'stable', 'demo']
 
-- include_role: name=update_packages
