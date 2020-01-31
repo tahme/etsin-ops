@@ -78,12 +78,12 @@
 
         - name: "Build"
           shell:
-            cmd: make
+            cmd: make -j{{ ansible_processor_vcpus }}
             chdir: "{{ openssl.source_path }}"
 
         - name: "Install to build path"
           shell:
-            cmd: make install
+            cmd: make -j{{ ansible_processor_vcpus }} install
             chdir: "{{ openssl.source_path }}"
 
     - name: "Remove source and temporary files"

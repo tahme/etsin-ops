@@ -44,7 +44,9 @@ Vagrant.configure("2") do |config|
         vbox.name = "etsin_local_development"
         vbox.gui = false
         vbox.memory = 4096
+        vbox.cpus = 4
         vbox.customize ["modifyvm", :id, "--nictype1", "virtio"]
+        #vbox.customize ["modifyvm", :id, "--cpuexecutioncap", "80"]
     end
   end
 end

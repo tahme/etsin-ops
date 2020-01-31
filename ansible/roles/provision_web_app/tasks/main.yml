@@ -36,12 +36,25 @@
 
   - include_role: name=gunicorn
 
-  - name: Install NPM
-    yum: name=npm state=latest
-
-  - name: Install npm-check-updates
-    npm: name=npm-check-updates state=latest global=yes
-    when: deployment_environment_id == 'local_development'
+  - block:
+      - name: Install NPM
+        yum: name=npm state=latest
+        when: deployment_environment_id != 'local_development'
+      - name: Install NPM for local development
+        block:
+          - name: Enable software collections
+            shell: yum install centos-release-scl-rh -y
+          - name: Install nodejs 12.x
+            shell: yum --enablerepo=centos-sclo-rh-testing install rh-nodejs12 -y
+          - name: link npm to /usr/local/bin/
+            shell: ln -s /opt/rh/rh-nodejs12/root/bin/npm /usr/bin/npm
+          - name: link node to /usr/local/bin/
+            shell: ln -s /opt/rh/rh-nodejs12/root/bin/node /usr/bin/node
+          - name: link nodejs to /usr/local/bin/
+            shell: ln -s /opt/rh/rh-nodejs12/root/bin/node /usr/bin/nodejs
+          - name: link npx to /usr/local/bin/
+            shell: ln -s /opt/rh/rh-nodejs12/root/bin/npx /usr/bin/npx
+        when: deployment_environment_id == 'local_development'
 
   - include_role: name=frontend
 
