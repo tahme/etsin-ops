@@ -12,18 +12,17 @@
       when: deployment_environment_id in ['local_development', 'demo']
 
     - name: Install Python 3.6
-      yum:
-        state: latest
-        name:
-          - python36u
-          - python36u-pip
-          - python36u-devel
-      when: deployment_environment_id in ['local_development', 'demo']
-
+      shell: yum --setopt=tsflags=nodocs -y install python36u python36u-pip python36u-devel
+      become: yes
+      when:
+        - not python36u_installed.stat.exists
+        - deployment_environment_id in ['local_development', 'demo']
 
     - name: Install Python 3.6
       yum: name=rh-python36 state=latest
-      when: deployment_environment_id not in ['local_development', 'demo']
+      when:
+        - not rh_python36_installed.stat.exists
+        - deployment_environment_id not in ['local_development', 'demo']
 
     - name: Create virtual environment directory for Python to {{ python_virtualenv_path }}
       file: path={{ python_virtualenv_path }} state=directory owner={{ app_user }} group=etsin mode=0755
@@ -35,8 +34,6 @@
     - name: Install virtual environment for Python to {{ python_virtualenv_path }}
       command: /opt/rh/rh-python36/root/usr/bin/python3 -m venv {{ python_virtualenv_path }}
       when: deployment_environment_id not in ['local_development', 'demo']
-
-  when: not python36u_installed.stat.exists and not rh_python36_installed.stat.exists
 
 - name: Set owner of pyvenv to {{ app_user }} user
   file: path={{ python_virtualenv_path }} owner={{ app_user }} group=etsin recurse=yes mode=0755
