@@ -100,3 +100,7 @@ fd_rems:
   enabled: false
   host: localhost
   api_key: changeme
+
+matomo:
+  host: matomo.csc.local
+  port: 80
