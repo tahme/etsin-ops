@@ -1,4 +1,5 @@
 ---
+- include_role: name=update_packages
 
 - name: Install selinux python3 bindings
   pip: name=selinux state=latest executable=pip3
@@ -15,15 +16,50 @@
   notify: restart sshd
 
 - name: Install common yum packages
-  shell: yum -y install gcc gcc-c++ git curl vim zip unzip warn=false
+  block:
+    - set_fact:
+        yum_packages:
+          - gcc
+          - gcc-c++
+          - python-devel
+          - git
+          - curl
+          - vim
+          - zip
+          - unzip
+          - python-passlib
+          - python-pip
+          - python-virtualenv
+          - rng-tools
+        yum_dev_packages: 
+          - htop
+          - ntp
+          - tree
+    - set_fact:
+        yum_packages: "{{ yum_packages + yum_dev_packages }}"
+      when: deployment_environment_id not in ['staging', 'production']
+    - shell: yum -y --setopt=tsflags=nodocs install {{ yum_packages | join(' ') }}
+      args:
+        warn: False
 
-- name: Install common os packages for development
-  shell: yum -y install htop ntp tree nano screen warn=false
-  when: deployment_environment_id not in ['staging', 'production']
+- name: Install latest python pip and setuptools using pip
+  block:
+    - set_fact:
+        pip_packages:
+          - pip
+          - setuptools
+        pip_dev_packages:
+          - pur
+    - set_fact:
+        pip_packages: "{{ pip_packages + pip_dev_packages }}"
+      when: deployment_environment_id == 'local_development'
+    - shell: pip install {{ pip_packages | join(' ') }}
 
-- name: Reinstall glibc-common just in case to make Finnish locale available
-  shell: yum -y reinstall glibc-common warn=false
-  when: deployment_environment_id == 'local_development'
+- name: Start and enable rngd
+  systemd:
+    name: rngd
+    state: started
+    enabled: yes
 
 - name: Set SELinux to permissive in current session
   shell: setenforce 0
@@ -76,6 +112,7 @@
         - "source .bash_aliases"
         - "aliases"
 
+    - meta: reset_connection
+
   when: deployment_environment_id in ['local_development', 'test', 'stable', 'demo']
 
-- include_role: name=update_packages

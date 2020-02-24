@@ -40,7 +40,7 @@
     when: deployment_environment_id not in ['local_development', 'test', 'stable', 'demo']
 
   - name: Create search index in case it does not exist already and load test data into the search index
-    shell: su - {{ app_user }} -c '{{ search_app_scripts_path }}/load_test_data_to_index.sh'
+    shell: su - {{ app_user }} -c "{{ search_app_scripts_path }}/load_test_data_to_index.sh"
     when: deployment_environment_id in ['local_development', 'test', 'stable', 'demo']
 
   - name: Create cronjob for running reindexing script that does not recreate the search index
@@ -72,16 +72,12 @@
       state: present
       line: "%etsin ALL=NOPASSWD: /sbin/service rabbitmq-consumer status, /sbin/service rabbitmq-consumer start, /sbin/service rabbitmq-consumer restart, /sbin/service rabbitmq-consumer stop, /bin/systemctl status rabbitmq-consumer.service, /bin/systemctl start rabbitmq-consumer.service, /bin/systemctl restart rabbitmq-consumer.service, /bin/systemctl stop rabbitmq-consumer.service"
 
-  - name: Reload systemd and enable RabbitMQ consumer service
+  - name: Reload configs, enable on boot and start RabbitMQ consumer service
     systemd:
       daemon_reload: yes
       name: rabbitmq-consumer
       enabled: yes
-
-  - name: Start RabbitMQ consumer service
-    systemd:
       state: started
-      name: rabbitmq-consumer
 
   - debug:
       msg: "{{ deployment_environment_id }} search app environment successfully set up."

@@ -44,7 +44,9 @@
     when: deployment_environment_id in ['test', 'stable', 'demo']
 
   - name: Create search index in case it does not exist already and load test data there
-    shell: su - {{ app_user }} -c '{{ search_app_scripts_path }}/load_test_data_to_index.sh'
+    shell: "{{ search_app_scripts_path }}/load_test_data_to_index.sh"
+    become: yes
+    become_user: "{{ app_user }}"
     when: deployment_environment_id in ['local_development', 'test', 'stable', 'demo']
 
   - name: Restart RabbitMQ consumer
