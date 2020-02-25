@@ -39,6 +39,7 @@
     state: present
     mode: 0640
   with_items: "{{ nginx_es_credentials }}"
+  no_log: true
 
 - name: NGINX | Restart NGINX
   service: name=nginx enabled=yes state=restarted
