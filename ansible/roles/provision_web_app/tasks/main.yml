@@ -15,19 +15,9 @@
     become_user: "{{ app_user }}"
     ignore_errors: yes
 
-  - name: Update app python package requirements to their latest versions
-    shell: pur --force --requirement {{ web_app_base_path }}/requirements.txt
-    become_user: "{{ app_user }}"
-    when: deployment_environment_id == 'local_development'
-
   - name: Install web app python package requirements
     pip: requirements={{ web_app_base_path }}/requirements.txt virtualenv={{ python_virtualenv_path }}
     become_user: "{{ app_user }}"
-
-  - name: Update app python test package requirements to their latest versions
-    shell: pur --force --requirement {{ web_app_base_path }}/test_requirements.txt
-    become_user: "{{ app_user }}"
-    when: deployment_environment_id == 'local_development'
 
   - name: Install web app python test package requirements
     pip: requirements={{ web_app_base_path }}/test_requirements.txt virtualenv={{ python_virtualenv_path }}
@@ -71,9 +61,18 @@
   - include_role: name=frontend
 
   - debug:
-      msg: "Local dev environment successfully set up. Run commands 'sudo su - {{ app_user }}' and 'runserver' to run the app."
-    when: deployment_environment_id == 'local_development'
-
-  - debug:
       msg: "{{ deployment_environment_id }} web app environment successfully set up."
     when: deployment_environment_id != 'local_development'
+
+  - block:
+
+      # note - pur is never executed automatically during provisioning because changed apis
+      # can break the app. run pur manually to update packages in requirements.txt
+      - name: Install pur
+        pip: name=pur state=latest virtualenv={{ python_virtualenv_path }}
+        become_user: "{{ app_user }}"
+
+      - debug:
+          msg: "Local dev environment successfully set up. Run commands 'sudo su - {{ app_user }}' and 'runserver' to run the app."
+
+    when: deployment_environment_id == 'local_development'

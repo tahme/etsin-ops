@@ -1,6 +1,9 @@
 ---
 - include_role: name=update_packages
 
+- name: Install selinux python3 bindings
+  pip: name=selinux state=latest executable=pip3
+
 - name: Make sure we have a 'etsin' group in OS
   group: name=etsin state=present
 
@@ -58,8 +61,15 @@
     state: started
     enabled: yes
 
-- name: Disable SELinux
-  selinux: state=permissive policy=targeted
+- name: Set SELinux to permissive in current session
+  shell: setenforce 0
+
+- name: Set SELinux to permissive in /etc/selinux/config
+  lineinfile:
+    dest: /etc/selinux/config
+    regexp: SELINUX=enforcing
+    line: SELINUX=permissive
+    state: present
 
 - name: Set locale LANG to en_US.UTF-8
   shell: localectl set-locale LANG=en_US.UTF-8
