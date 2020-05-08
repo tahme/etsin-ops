@@ -1,13 +1,13 @@
 ---
 - name: Create directory for SSL certificates
   file: path={{ ssl_certificates_path }} state=directory
-  when: deployment_environment_id in ['local_development', 'test', 'stable', 'staging', 'demo']
+  when: deployment_environment_id in ['local_development', 'staging', 'demo']
 
 - name: Create separate directory for redirect SSL certificates
   file: path={{ redirect_ssl_certificates_path }} state=directory
-  when: deployment_environment_id in ['local_development', 'test', 'stable', 'staging', 'demo']
+  when: deployment_environment_id in ['local_development', 'staging', 'demo']
 
-- name: Create self-signed SSL certs for non-production
+- name: Create self-signed SSL certs for local_development, staging, and demo
   block:
     - name: Fetch, build and install openssl 1.1
       block:
@@ -51,7 +51,7 @@
         self_signed_cert:
         self_signed_redirect_cert:
         certs:
-  when: deployment_environment_id not in ['production']
+  when: deployment_environment_id not in ['production', 'test', 'stable']
 
 - block:
     - name: Install dos2unix
@@ -72,4 +72,4 @@
     - name: Fix concatenated file carriage returns
       command: dos2unix {{ ssl_certificates_path }}/{{ ssl_certificate_name }}
 
-  when: deployment_environment_id in ['test', 'stable', 'demo']
+  when: deployment_environment_id in ['demo']
