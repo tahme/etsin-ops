@@ -36,25 +36,25 @@
             shell: yum --setopt=tsflags=nodocs -y install centos-release-scl-rh
           - name: Install nodejs 12.x
             shell: yum --enablerepo=centos-sclo-rh-testing -y install rh-nodejs12
-          - name: link npm to /usr/local/bin/
+          - name: link npm to /usr/bin/
             file:
               src: /opt/rh/rh-nodejs12/root/bin/npm
-              dest: /usr/local/bin/npm
+              dest: /usr/bin/npm
               state: link
-          - name: link node to /usr/local/bin/
+          - name: link node to /usr/bin/
             file:
               src: /opt/rh/rh-nodejs12/root/bin/node
-              dest: /usr/local/bin/node
+              dest: /usr/bin/node
               state: link
-          - name: link nodejs to /usr/local/bin/
+          - name: link nodejs to /usr/bin/
             file:
               src: /opt/rh/rh-nodejs12/root/bin/node
-              dest: /usr/local/bin/nodejs
+              dest: /usr/bin/nodejs
               state: link
-          - name: link npx to /usr/local/bin/
+          - name: link npx to /usr/bin/
             file:
               src: /opt/rh/rh-nodejs12/root/bin/npx
-              dest: /usr/local/bin/npx
+              dest: /usr/bin/npx
               state: link
         when: deployment_environment_id == 'local_development'
 
