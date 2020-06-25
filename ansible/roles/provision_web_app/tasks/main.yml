@@ -27,10 +27,10 @@
   - include_role: name=gunicorn
 
   - block:
-      - name: Install NPM
+      - name: Install NPM (legacy)
         yum: name=npm state=latest
-        when: deployment_environment_id not in ['local_development', 'test']
-      - name: Install NPM for local development
+        when: deployment_environment_id not in ['local_development', 'test', 'stable', 'staging', 'demo', 'production']
+      - name: Install NPM
         block:
           - name: Enable software collections
             shell: yum --setopt=tsflags=nodocs -y install centos-release-scl-rh
@@ -56,7 +56,7 @@
               src: /opt/rh/rh-nodejs12/root/bin/npx
               dest: /usr/local/bin/npx
               state: link
-        when: deployment_environment_id in ['local_development', 'test']
+        when: deployment_environment_id in ['local_development', 'test', 'stable', 'staging', 'demo', 'production']
 
   - include_role: name=frontend
 
