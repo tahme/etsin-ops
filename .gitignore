@@ -39,5 +39,6 @@ faircentos
 !*.secret
 .secrets/secrets.setup.sh
 
+# never commit random_seed
 .gitsecret.dev/keys/random_seed
 .gitsecret/keys/random_seed
