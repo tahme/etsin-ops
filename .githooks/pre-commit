@@ -6,7 +6,7 @@
 # it wants to stop the commit.
 #
 # To enable this hook, rename this file to "pre-commit".
-
+git secret hide -d
 if git rev-parse --verify HEAD >/dev/null 2>&1
 then
 	against=HEAD
@@ -17,7 +17,7 @@ fi
 
 # If you want to allow non-ASCII filenames set this variable to true.
 allownonascii=$(git config --bool hooks.allownonascii)
-git secret hide -d
+
 # Redirect output to stderr.
 exec 1>&2
 
