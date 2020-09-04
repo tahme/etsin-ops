@@ -32,12 +32,14 @@ faircentos
 *.crt
 
 # Secrets
+# Because how .gitignore rules work, must list specific folders to ignore instead of entire .secrets folder
+# This is because we don't want to ignore the encrypted secrets in .secrets folder
 .secrets/ansible/**/**/host_vars/*
 .secrets/ansible/**/**/group_vars/*
 .secrets/ansible/**/**/public_keys/*
 .secrets/ansible/files/*.html
 !*.secret
-.secrets/secrets.setup.sh
+secrets.setup.sh
 
 # never commit random_seed
 .gitsecret.dev/keys/random_seed
